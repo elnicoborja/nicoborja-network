@@ -1,0 +1,33 @@
+{
+  "brand": {
+    "USER_NAME":      "Nico Borja",
+    "BRAND":          "SOUND",
+    "USER_DOMAIN":    "network.nicoborja.com",
+    "DIAGNOSTIC_URL": "https://checkup.nicoborja.com",
+    "SUBSTACK_URL":   "https://nicoborja.substack.com/p/infodipity-es-con-tilde",
+    "LINKEDIN_URL":   "https://www.linkedin.com/in/nicoborja",
+    "TOOLKIT_REPO":   "https://github.com/nicoborja/network-viz-toolkit"
+  },
+  "icp_keywords":       ["marketing", "growth", "product", "design", "data", "ai", "ml"],
+  "ai_intent_keywords": ["ai", "machine learning", "ml", "automation", "intelligent", "learning", "data"],
+  "senior_keywords":    ["chief", "vp", "head of", "director", "founder", "owner", "co-founder", "cto", "ceo", "cmo", "coo", "cpo", "cfo"],
+  "latam_keywords":     ["latam", "mexico", "méxico", "colombia", "argentina", "chile", "peru", "perú", "spain", "españa", "miami"],
+  "eras": {
+    "Arquitectura (2009-2011)":          [2009, 2011],
+    "Red Rock (2012-2014)":              [2012, 2014],
+    "Vice peak (2015-2016)":             [2015, 2016],
+    "BBDO + Vidaprimo (2017)":           [2017, 2017],
+    "Playground LATAM (2018-2020)":      [2018, 2020],
+    "Consultancy + TR (2021-2025)":      [2021, 2025],
+    "SOUND era (2026)":                  [2026, 2026]
+  },
+  "era_color": {
+    "Arquitectura (2009-2011)":          "#FF44AB",
+    "Red Rock (2012-2014)":              "#DB75FF",
+    "Vice peak (2015-2016)":             "#DFFF00",
+    "BBDO + Vidaprimo (2017)":           "#FF714E",
+    "Playground LATAM (2018-2020)":      "#FFB70E",
+    "Consultancy + TR (2021-2025)":      "#69A8FF",
+    "SOUND era (2026)":                  "#00FDC9"
+  }
+}

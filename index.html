@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi red · Nico Borja</title>
+<meta name="description" content="Una red no es audiencia. Es memoria de trabajo. 17 años de capital relacional, mapeado y servido a un agente. Net results, sin ruido.">
+<meta property="og:title" content="Mi red · Nico Borja">
+<meta property="og:description" content="Una red no es audiencia. Es memoria de trabajo. 17 años, 1,342 conexiones, ocho lecturas distintas.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://network.nicoborja.com">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --neon: #DFFF00;
+    --ink: #000000;
+    --paper: #FFFFFF;
+    --deep: #0E0E0E;
+    --line: #2A2A2A;
+    --soft: #BDBDBD;
+    --muted: #6B6B6B;
+  }
+  html, body {
+    background-color: var(--ink);
+    color: var(--paper);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    background-image: radial-gradient(circle, rgba(223, 255, 0, 0.06) 1px, transparent 1.2px);
+    background-size: 28px 28px;
+    background-attachment: fixed;
+  }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  .panel       { border: 2px solid #FFFFFF; background: rgba(0,0,0,0.55); }
+  .panel-deep  { border: 2px solid #FFFFFF; background: var(--deep); }
+  .panel-soft  { border: 1px solid #2A2A2A; background: rgba(0,0,0,0.4); }
+
+  /* SVG defaults */
+  svg text { font-family: 'JetBrains Mono', monospace; fill: var(--soft); font-size: 11px; }
+  svg .label-strong { fill: var(--paper); font-size: 12px; font-weight: 600; }
+  svg .label-neon   { fill: var(--neon); font-weight: 700; }
+
+  /* Table */
+  table { border-collapse: collapse; }
+  th, td { border-bottom: 1px solid #1F1F1F; padding: 0.7rem 0.5rem; vertical-align: top; }
+  tr:hover td { background: rgba(223, 255, 0, 0.04); }
+  .tier-b { color: var(--neon); font-weight: 700; }
+  .tier-c { color: #FFFFFF; font-weight: 600; }
+  .tier-d { color: var(--soft); }
+  .badge {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    margin-right: 4px;
+    margin-bottom: 2px;
+  }
+  .badge-warm   { background: var(--neon); color: var(--ink); }
+  .badge-thin   { background: transparent; border: 1px solid var(--neon); color: var(--neon); }
+  .badge-cold   { color: var(--muted); }
+
+  /* Section spacing */
+  section { padding: 4rem 0; border-bottom: 2px solid #FFFFFF; }
+  @media (min-width: 768px) { section { padding: 5rem 0; } }
+  .container-x { max-width: 80rem; margin-inline: auto; padding-inline: 1.5rem; }
+
+  /* Manifesto */
+  .manifesto p { margin-bottom: 0.4em; }
+  .manifesto .stanza + .stanza { margin-top: 1.2em; }
+
+  /* CTA buttons */
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    border: 2px solid var(--paper);
+    padding: 0.7rem 1.2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-weight: 700;
+    color: var(--paper);
+    text-decoration: none;
+    transition: all 0.18s ease;
+  }
+  .btn:hover { background: var(--neon); color: var(--ink); border-color: var(--neon); }
+  .btn-neon  { background: var(--neon); color: var(--ink); border-color: var(--neon); }
+  .btn-neon:hover { background: var(--paper); border-color: var(--paper); color: var(--ink); }
+
+  /* Tooltip for D3 charts */
+  .d3-tooltip {
+    position: absolute;
+    pointer-events: none;
+    background: var(--ink);
+    border: 2px solid var(--neon);
+    color: var(--paper);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 6px 10px;
+    line-height: 1.5;
+    z-index: 99;
+    opacity: 0;
+    transition: opacity 0.12s;
+    max-width: 240px;
+  }
+  .d3-tooltip strong { color: var(--neon); display: block; margin-bottom: 2px; font-weight: 700; }
+</style>
+</head>
+<body class="min-h-screen">
+
+<!-- =========================================================
+     HEADER
+     ========================================================= -->
+<header class="border-b-2 border-white">
+  <div class="container-x py-4 flex items-center justify-between flex-wrap gap-3">
+    <div class="flex items-center gap-3">
+      <div class="w-3 h-3 bg-[#DFFF00]"></div>
+      <div class="mono text-xs uppercase tracking-[0.22em] font-medium">SOUND · NICO BORJA</div>
+    </div>
+    <div class="mono text-[10px] uppercase tracking-[0.22em] text-zinc-400">network.nicoborja.com · datos al 2026-05-08</div>
+  </div>
+</header>
+
+<!-- =========================================================
+     SECTION 1 · HERO + MANIFESTO
+     ========================================================= -->
+<section id="hero">
+  <div class="container-x">
+    <div class="inline-flex items-center gap-2 mono text-[10px] md:text-xs uppercase tracking-[0.22em] mb-10 border-2 border-[#DFFF00] text-[#DFFF00] px-3 py-1.5">
+      <span class="w-1.5 h-1.5 bg-[#DFFF00]"></span>
+      OCHO LECTURAS DE LA MISMA RED
+    </div>
+
+    <h1 class="text-5xl md:text-7xl lg:text-8xl font-black mb-10 leading-[0.92] tracking-tight">
+      Una red no es audiencia<span class="text-[#DFFF00]">.</span><br>
+      <span class="text-zinc-400">Es memoria de trabajo.</span>
+    </h1>
+
+    <div class="grid md:grid-cols-2 gap-10 items-start">
+      <div class="manifesto text-lg md:text-xl text-zinc-300 leading-relaxed max-w-xl">
+        <div class="stanza">
+          <p>No se cuenta. Se navega.</p>
+          <p>No se broadcasta. Se activa.</p>
+        </div>
+        <div class="stanza">
+          <p>Cada conexión es un capítulo profesional</p>
+          <p>con nombre, contexto y fecha.</p>
+        </div>
+        <div class="stanza">
+          <p>Lo que se lee abajo es eso: la materia prima,</p>
+          <p>no el inventario. El método para leerla,</p>
+          <p>no el resultado de venderla.</p>
+        </div>
+        <div class="stanza">
+          <p class="mono text-sm uppercase tracking-[0.2em] text-[#DFFF00] mt-6">Net results, sin ruido.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div class="panel-deep p-5">
+          <div class="mono text-[10px] uppercase tracking-[0.22em] text-zinc-400 mb-2">CONEXIONES</div>
+          <div class="text-4xl md:text-5xl font-black text-[#DFFF00]">1,342</div>
+          <div class="mono text-[10px] text-zinc-500 mt-2">17 años · 2009-2026</div>
+        </div>
+        <div class="panel-deep p-5">
+          <div class="mono text-[10px] uppercase tracking-[0.22em] text-zinc-400 mb-2">DECISORES</div>
+          <div class="text-4xl md:text-5xl font-black text-[#DFFF00]">401</div>
+          <div class="mono text-[10px] text-zinc-500 mt-2">CXO, VP, Director, Founder</div>
+        </div>
+        <div class="panel-deep p-5">
+          <div class="mono text-[10px] uppercase tracking-[0.22em] text-zinc-400 mb-2">PRIORIZADOS</div>
+          <div class="text-4xl md:text-5xl font-black text-[#DFFF00]">27</div>
+          <div class="mono text-[10px] text-zinc-500 mt-2">score &gt;= 40 sobre 100</div>
+        </div>
+        <div class="panel-deep p-5">
+          <div class="mono text-[10px] uppercase tracking-[0.22em] text-zinc-400 mb-2">RELACIONES MUTUAS</div>
+          <div class="text-4xl md:text-5xl font-black text-[#DFFF00]">10</div>
+          <div class="mono text-[10px] text-zinc-500 mt-2">endosaron y endosaron de vuelta</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 2 · TIMELINE (AREA CHART WITH ERA BANDS)
+     ========================================================= -->
+<section id="timeline">
+  <div class="container-x">
+    <div class="mono text-[10px] uppercase tracking-[0.24em] text-[#DFFF00] mb-3">LECTURA 01 · DENSIDAD POR AÑO</div>
+    <h2 class="text-3xl md:text-5xl font-black mb-4 leading-tight">
+      La forma de 17 años<span class="text-[#DFFF00]">.</span>
+    </h2>
+    <p class="text-zinc-400 text-base md:text-lg mb-10 max-w-3xl leading-relaxed">
+      Cada barra es un año laboral. La línea sobre las barras marca acumulado. El pico de 2016 (283 conexiones) es el año Vice Media Colombia: dirección digital, lanzamiento de Budweiser Colombia, eventos Corona Sunsets, primer Boiler Room en Bogotá con 2,500 asistentes registrados. 2017 marca el pivot a BBDO: estrategia y backend para artistas y media outlets, mi crecimiento pasa a ser el de otros.
+    </p>
+    <div class="panel-deep p-4 md:p-6">
+      <div id="timelineChart" style="min-height: 380px;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 3 · COMPOSITION (TREEMAP)
+     ========================================================= -->
+<section id="composition">
+  <div class="container-x">
+    <div class="mono text-[10px] uppercase tracking-[0.24em] text-[#DFFF00] mb-3">LECTURA 02 · COMPOSICIÓN DE ROLES</div>
+    <h2 class="text-3xl md:text-5xl font-black mb-4 leading-tight">
+      Quién contesta primero el teléfono<span class="text-[#DFFF00]">.</span>
+    </h2>
+    <p class="text-zinc-400 text-base md:text-lg mb-10 max-w-3xl leading-relaxed">
+      La red se concentra en decisores y operadores senior, no en juniors. Eso cambia el método: no escala por volumen, escala por multiplicador. Tamaño del bloque = cantidad de conexiones que cargan ese rol en su título.
+    </p>
+    <div class="panel-deep p-4 md:p-6">
+      <div id="treemapChart" style="min-height: 460px;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 4 · SCORE FUNNEL
+     ========================================================= -->
+<section id="scoring">
+  <div class="container-x">
+    <div class="mono text-[10px] uppercase tracking-[0.24em] text-[#DFFF00] mb-3">LECTURA 03 · FILTRO DEL AGENTE</div>
+    <h2 class="text-3xl md:text-5xl font-black mb-4 leading-tight">
+      El filtro es brutal<span class="text-[#DFFF00]">.</span>
+    </h2>
+    <p class="text-zinc-400 text-base md:text-lg mb-10 max-w-3xl leading-relaxed">
+      Cada conexión se puntúa de 0 a 100 sobre cuatro señales: seniority, ICP fit, pista LATAM, warmth. Sólo 27 superan el umbral. Eso no es debilidad de la red. Es la calidad del filtro. La proporción que se ve abajo es a escala real.
+    </p>
+    <div class="panel-deep p-6">
+      <div id="funnelChart" style="min-height: 280px;"></div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6 mono text-[10px] uppercase tracking-[0.18em]">
+        <div><span class="text-[#DFFF00] text-2xl font-black mono">0</span><br><span class="text-zinc-400">Tier A · 80+</span></div>
+        <div><span class="text-[#DFFF00] text-2xl font-black mono">2</span><br><span class="text-zinc-400">Tier B · 60-79</span></div>
+        <div><span class="text-[#DFFF00] text-2xl font-black mono">25</span><br><span class="text-zinc-400">Tier C · 40-59</span></div>
+        <div><span class="text-zinc-500 text-2xl font-black mono">1,315</span><br><span class="text-zinc-400">Tier D · &lt;40</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 5 · WARMTH SIGNALS (3 BIG NUMBERS)
+     ========================================================= -->
+<section id="warmth">
+  <div class="container-x">
+    <div class="mono text-[10px] uppercase tracking-[0.24em] text-[#DFFF00] mb-3">LECTURA 04 · PUERTAS YA ABIERTAS</div>
+    <h2 class="text-3xl md:text-5xl font-black mb-4 leading-tight">
+      La temperatura de la red<span class="text-[#DFFF00]">.</span>
+    </h2>
+    <p class="text-zinc-400 text-base md:text-lg mb-10 max-w-3xl leading-relaxed">
+      No todo outreach empieza en frío. Tres señales marcan dónde la conversación arranca con contexto. Cruzadas con ICP alignment, el orden de prioridad se vuelve obvio: la celda más caliente arriba a la izquierda es la cola de outreach del primer día.
+    </p>
+
+    <div class="panel-deep p-6 overflow-x-auto">
+      <table class="w-full text-sm" id="warmthHeatTable">
+        <thead>
+          <tr>
+            <th class="text-left mono text-[10px] uppercase tracking-[0.22em] text-zinc-500 pb-3 pr-4 font-bold">SEÑAL</th>
+            <th class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] pb-3 px-2 font-bold text-center">ICP ALINEADO</th>
+            <th class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] pb-3 px-2 font-bold text-center">ICP PARCIAL</th>
+            <th class="mono text-[10px] uppercase tracking-[0.22em] text-zinc-500 pb-3 px-2 font-bold text-center">FUERA</th>
+            <th class="mono text-[10px] uppercase tracking-[0.22em] text-zinc-500 pb-3 pl-2 font-bold text-right">TOTAL</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div class="mono text-[10px] uppercase tracking-[0.18em] text-zinc-500 mt-4">
+        Color = intensidad relativa por celda (escala logarítmica). Lectura: empieza por la columna izquierda, baja por intensidad.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 6 · ERAS (HORIZONTAL BAR)
+     ========================================================= -->
+<section id="eras">
+  <div class="container-x">
+    <div class="mono text-[10px] uppercase tracking-[0.24em] text-[#DFFF00] mb-3">LECTURA 05 · CAPÍTULOS</div>
+    <h2 class="text-3xl md:text-5xl font-black mb-4 leading-tight">
+      De qué época viene cada conexión<span class="text-[#DFFF00]">.</span>
+    </h2>
+    <p class="text-zinc-400 text-base md:text-lg mb-10 max-w-3xl leading-relaxed">
+      Cada conexión es un capítulo profesional con nombre y fecha. Vice peak (2015-2016) construyó 390 conexiones en dos años. La era SOUND empieza el 11 de abril de 2026, post Thomson Reuters.
+    </p>
+    <div class="panel-deep p-4 md:p-6">
+      <div id="erasChart" style="min-height: 360px;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 7 · NETWORK GRAPH (FORCE-DIRECTED HUB & SPOKE)
+     ========================================================= -->
+<section id="network">
+  <div class="container-x">
+    <div class="mono text-[10px] uppercase tracking-[0.24em] text-[#DFFF00] mb-3">LECTURA 06 · LOS 30 PRIORIZADOS COMO RED</div>
+    <h2 class="text-3xl md:text-5xl font-black mb-4 leading-tight">
+      Vista de constelación<span class="text-[#DFFF00]">.</span>
+    </h2>
+    <p class="text-zinc-400 text-base md:text-lg mb-10 max-w-3xl leading-relaxed">
+      Los 30 perfiles que el agente prioriza para outreach manual, ordenados como red. Tamaño del nodo por score. Color por era. Línea más gruesa cuando la relación es mutua. Hover para detalles.
+    </p>
+    <div class="panel-deep p-4 md:p-6 relative">
+      <div id="networkChart" style="min-height: 540px;"></div>
+      <div id="networkMobileList" class="hidden"></div>
+      <button id="networkReset" type="button" class="absolute top-3 right-3 mono text-[10px] uppercase tracking-[0.18em] text-zinc-400 hover:text-[#DFFF00] border border-zinc-700 hover:border-[#DFFF00] px-2 py-1 rounded transition" style="display:none">RESET VIEW</button>
+      <div class="flex flex-wrap gap-x-5 gap-y-2 mt-5 mono text-[10px] uppercase tracking-[0.18em]" id="networkLegend"></div>
+      <div class="mono text-[10px] uppercase tracking-[0.18em] text-zinc-500 mt-3">
+        Scroll para zoom. Drag sobre fondo para pan. Drag sobre un nodo para reposicionar. En móvil, la red se reemplaza por una lista vertical ordenada por score.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 8 · SKILLS BUBBLES
+     ========================================================= -->
+<section id="skills">
+  <div class="container-x">
+    <div class="mono text-[10px] uppercase tracking-[0.24em] text-[#DFFF00] mb-3">LECTURA 07 · LO QUE LA RED DICE QUE SÉ HACER</div>
+    <h2 class="text-3xl md:text-5xl font-black mb-4 leading-tight">
+      Endorsements como espejo<span class="text-[#DFFF00]">.</span>
+    </h2>
+    <p class="text-zinc-400 text-base md:text-lg mb-10 max-w-3xl leading-relaxed">
+      Tamaño de la burbuja = endorsements recibidos. La mayoría son de la era arquitectura, diseño y marketing pre-AI. Hay un trabajo de actualización pendiente y este reto es parte de él. Las skills con borde lima y check (✓) son las que también están respaldadas por una certificación formal en mi LinkedIn, no solo por endosos.
+    </p>
+    <div class="panel-deep p-4 md:p-6">
+      <div id="skillsChart" style="min-height: 480px;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 9 · TOP 30 LEADS TABLE
+     ========================================================= -->
+<section id="top30">
+  <div class="container-x">
+    <div class="mono text-[10px] uppercase tracking-[0.24em] text-[#DFFF00] mb-3">LECTURA 08 · COLA DE OUTREACH</div>
+    <h2 class="text-3xl md:text-5xl font-black mb-4 leading-tight">
+      Los 30 primeros<span class="text-[#DFFF00]">.</span>
+    </h2>
+    <p class="text-zinc-400 text-base md:text-lg mb-10 max-w-3xl leading-relaxed">
+      El agente entrega cinco por día, lunes a viernes. La fila se reordena cada noche según señales nuevas: posts, reinvitaciones, completaciones del diagnóstico. Esta vista es la materia prima del primer cron de PawBot.
+    </p>
+    <div class="panel-deep p-2 md:p-4 overflow-x-auto">
+      <table class="w-full text-sm" id="leadsTableEl">
+        <thead>
+          <tr class="text-zinc-400 mono text-[10px] uppercase tracking-[0.18em] select-none">
+            <th class="text-left cursor-pointer hover:text-[#DFFF00]" data-sort="icp_score" data-dir="desc">SCORE <span class="sort-arrow">↓</span></th>
+            <th class="text-left cursor-pointer hover:text-[#DFFF00]" data-sort="last">NOMBRE</th>
+            <th class="text-left">ROL</th>
+            <th class="text-left">EMPRESA</th>
+            <th class="text-left cursor-pointer hover:text-[#DFFF00]" data-sort="era">ERA</th>
+            <th class="text-left">SEÑALES</th>
+          </tr>
+        </thead>
+        <tbody id="leadsTable"></tbody>
+      </table>
+      <div class="mono text-[10px] uppercase tracking-[0.18em] text-zinc-500 px-2 mt-3">
+        Click sobre SCORE, NOMBRE o ERA para reordenar. Cell color del score = mapa de calor 0-100 sobre la rampa divergente.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 10 · METHOD
+     ========================================================= -->
+<section id="method">
+  <div class="container-x grid lg:grid-cols-2 gap-12">
+    <div>
+      <div class="mono text-[10px] uppercase tracking-[0.24em] text-[#DFFF00] mb-3">CÓMO SE HIZO</div>
+      <h2 class="text-3xl md:text-5xl font-black mb-6 leading-tight">
+        El método<span class="text-[#DFFF00]">.</span>
+      </h2>
+      <ol class="space-y-4 text-zinc-300 text-base md:text-lg leading-relaxed">
+        <li class="flex gap-4"><span class="mono text-[#DFFF00] font-bold mt-1">01</span><span>Export oficial de LinkedIn (Settings &gt; Data Privacy &gt; Get a copy of your data). Llega un ZIP con Connections.csv, Skills.csv, Endorsements.csv.</span></li>
+        <li class="flex gap-4"><span class="mono text-[#DFFF00] font-bold mt-1">02</span><span>Parser local (Python) que normaliza, deduplica, infiere seniority desde el headline, y agrega era profesional según fecha de conexión.</span></li>
+        <li class="flex gap-4"><span class="mono text-[#DFFF00] font-bold mt-1">03</span><span>Scoring 0-100 sobre cuatro señales declaradas: seniority, ICP fit (industria + keywords), pista LATAM, warmth (endosos + reinvitaciones).</span></li>
+        <li class="flex gap-4"><span class="mono text-[#DFFF00] font-bold mt-1">04</span><span>Output: un JSON con las ocho lecturas de arriba, inyectado en este HTML. PawBot también lo consume para el digest matinal.</span></li>
+      </ol>
+    </div>
+    <div>
+      <div class="mono text-[10px] uppercase tracking-[0.24em] text-[#DFFF00] mb-3">POR QUÉ ASÍ</div>
+      <h2 class="text-3xl md:text-5xl font-black mb-6 leading-tight">
+        Antes de pedirte algo<span class="text-[#DFFF00]">.</span>
+      </h2>
+      <div class="text-zinc-300 text-base md:text-lg leading-relaxed space-y-4">
+        <p>La mayoría del growth en LATAM se vende en horas, "alcance", o suscripciones mensuales sin entregable nombrado. Eso recompensa el ruido, no el resultado. Una agencia gana cuando su pipeline crece. Yo trabajo al revés.</p>
+        <p>Cobrar por el resultado nombrado. Entregar sólo eso. No tomar nada más.</p>
+        <p>Esa es la forma de SOUND y la forma como leo esta red. No es una lista para vender. Es una lista para decidir a quién contesto primero.</p>
+        <p>Publicar el método de selección antes que el resultado del outreach es la versión sin ruido del growth: enseñar el filtro, no el embudo. Si el filtro está bien construido, los 30 nombres se vuelven obvios. Si no, ningún embudo lo arregla después.</p>
+        <p class="mono text-sm uppercase tracking-[0.2em] text-[#DFFF00]">Net results, sin ruido.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 11 · TOOLKIT PITCH
+     ========================================================= -->
+<section id="toolkit">
+  <div class="container-x">
+    <div class="mono text-[10px] uppercase tracking-[0.24em] text-[#DFFF00] mb-3">QUIERES HACER LO MISMO CON TU RED</div>
+    <h2 class="text-3xl md:text-5xl font-black mb-6 leading-tight">
+      El toolkit<span class="text-[#DFFF00]">.</span>
+    </h2>
+    <p class="text-zinc-300 text-base md:text-lg mb-10 max-w-3xl leading-relaxed">
+      Las ocho lecturas se generan a partir de un ZIP de LinkedIn. Tomé el método y lo empaqueté como un parser Python + un template HTML + un SKILL.md para que cualquier LLM lo aplique a tu propia exportación. Es portable, local, sin enviar tu data a ningún sitio.
+    </p>
+
+    <div class="grid md:grid-cols-2 gap-6 mb-10">
+      <div class="panel-deep p-6">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-3 font-bold">QUÉ TRAE EL TOOLKIT</div>
+        <ul class="space-y-3 text-zinc-300 text-sm leading-relaxed">
+          <li class="flex gap-3"><span class="text-[#DFFF00] font-bold">→</span><span><strong>SKILL.md</strong>: instrucciones para Claude / Cursor / cualquier LLM agéntico. Pegas el ZIP, te devuelve tu HTML.</span></li>
+          <li class="flex gap-3"><span class="text-[#DFFF00] font-bold">→</span><span><strong>parser.py</strong>: script Python que parsea Connections.csv y produce el JSON de las ocho lecturas.</span></li>
+          <li class="flex gap-3"><span class="text-[#DFFF00] font-bold">→</span><span><strong>template.html</strong>: este mismo archivo, con un slot vacío donde el parser inyecta tus datos.</span></li>
+          <li class="flex gap-3"><span class="text-[#DFFF00] font-bold">→</span><span><strong>README.md</strong>: pasos para exportar de LinkedIn, correr el parser, y publicar tu versión.</span></li>
+        </ul>
+      </div>
+      <div class="panel-deep p-6">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-3 font-bold">PARA QUIÉN ES</div>
+        <ul class="space-y-3 text-zinc-300 text-sm leading-relaxed">
+          <li class="flex gap-3"><span class="text-[#DFFF00] font-bold">→</span><span>Operadores que llevan más de 5 años en LinkedIn y no saben qué hay dentro de su red.</span></li>
+          <li class="flex gap-3"><span class="text-[#DFFF00] font-bold">→</span><span>Founders que necesitan una capa de inteligencia sobre sus contactos sin pagar Apollo o Clay.</span></li>
+          <li class="flex gap-3"><span class="text-[#DFFF00] font-bold">→</span><span>Cualquiera buscando cambiar el método: del broadcast al uno a uno.</span></li>
+          <li class="flex gap-3"><span class="text-[#DFFF00] font-bold">→</span><span>Tú no necesitas saber Python. Necesitas un LLM que lea SKILL.md.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap gap-3">
+      <a href="https://github.com/nicoborja/network-viz-toolkit" target="_blank" rel="noopener" class="btn btn-neon">Toolkit en GitHub →</a>
+      <a href="/network-viz-toolkit/SKILL.md" class="btn">SKILL.md directo</a>
+      <a href="https://checkup.nicoborja.com" target="_blank" rel="noopener" class="btn">Probar el diagnóstico →</a>
+    </div>
+    <p class="mono text-[10px] uppercase tracking-[0.2em] text-zinc-500 mt-6">
+      El repo se publica con licencia MIT. Si lo usas, cuéntale al universo.
+    </p>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 12 · CTA + LINKS
+     ========================================================= -->
+<section id="cta" class="border-b-0">
+  <div class="container-x">
+    <div class="mono text-[10px] uppercase tracking-[0.24em] text-[#DFFF00] mb-3">SIGUE EL EXPERIMENTO</div>
+    <h2 class="text-3xl md:text-5xl font-black mb-8 leading-tight">
+      14 días, 8 lecturas, 1 marca<span class="text-[#DFFF00]">.</span>
+    </h2>
+    <p class="text-zinc-300 text-base md:text-lg mb-10 max-w-3xl leading-relaxed">
+      Esto es el día 4 del reto público con Lab10, la comunidad más grande de IA en LatAm. PawBot dispara su primer digest hoy 2pm Bogotá. La data se actualiza cuando algo se mueve. Sigue el play-by-play.
+    </p>
+    <div class="flex flex-wrap gap-3">
+      <a href="https://checkup.nicoborja.com" target="_blank" rel="noopener" class="btn btn-neon">Diagnóstico de 60 segundos →</a>
+      <a href="https://nicoborja.substack.com/p/infodipity-es-con-tilde" target="_blank" rel="noopener" class="btn">Infodípity (la tesis)</a>
+      <a href="https://www.linkedin.com/in/nicoborja" target="_blank" rel="noopener" class="btn">LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     FOOTER
+     ========================================================= -->
+<footer class="border-t-2 border-white">
+  <div class="container-x py-8 flex items-center justify-between flex-wrap gap-3">
+    <span class="mono text-[10px] uppercase tracking-[0.22em] text-zinc-400">SOUND · NICO BORJA · 2026</span>
+    <span class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00]">NET RESULTS · SIN RUIDO</span>
+  </div>
+</footer>
+
+<div class="d3-tooltip" id="tooltip"></div>
+
+<!-- =========================================================
+     DATA + D3 RENDERERS
+     ========================================================= -->
+<script>
+const DATA = {
+  "total_connections": 1342,
+  "decisores": 401,
+  "priorizados": 27,
+  "mutual_endorsements": 10,
+  "email_count": 39,
+  "reinvitaciones": 114,
+  "connections_by_year": {
+    "2009": 12,
+    "2010": 6,
+    "2011": 23,
+    "2012": 57,
+    "2013": 104,
+    "2014": 187,
+    "2015": 107,
+    "2016": 283,
+    "2017": 142,
+    "2018": 56,
+    "2019": 125,
+    "2020": 49,
+    "2021": 25,
+    "2022": 27,
+    "2023": 24,
+    "2024": 31,
+    "2025": 41,
+    "2026": 43
+  },
+  "role_keywords": {
+    "founders": 153,
+    "cxo": 401,
+    "directors": 228,
+    "managers": 236,
+    "marketing": 83,
+    "design_creative": 123,
+    "data_ai": 19,
+    "product": 50
+  },
+  "score_distribution": {
+    "tier_a_80plus": 0,
+    "tier_b_60_79": 2,
+    "tier_c_40_59": 25,
+    "tier_d_below40": 1315
+  },
+  "top_skills": {
+    "Digital Marketing": 18,
+    "Project Management": 9,
+    "Interior Design": 7,
+    "Spanish": 6,
+    "Architectures": 6,
+    "Marketing Strategy": 5,
+    "Architecture": 5,
+    "SketchUp": 5,
+    "Online Advertising": 4,
+    "Marketing": 4,
+    "Customer Relations": 4,
+    "Google Adwords": 4,
+    "CRM": 4,
+    "Fluent English": 3,
+    "Interaction Design": 3
+  },
+  "era_distribution": {
+    "Arquitectura (2009-2011)": 41,
+    "Red Rock (2012-2014)": 348,
+    "Vice peak (2015-2016)": 390,
+    "BBDO + Vidaprimo (2017)": 142,
+    "Playground LATAM (2018-2020)": 230,
+    "Consultancy + TR (2021-2025)": 148,
+    "SOUND era (2026)": 43
+  },
+  "era_color": {
+    "Arquitectura (2009-2011)": "#FF44AB",
+    "Red Rock (2012-2014)": "#DB75FF",
+    "Vice peak (2015-2016)": "#DFFF00",
+    "BBDO + Vidaprimo (2017)": "#FF714E",
+    "Playground LATAM (2018-2020)": "#FFB70E",
+    "Consultancy + TR (2021-2025)": "#69A8FF",
+    "SOUND era (2026)": "#00FDC9"
+  },
+  "top_30_leads": [
+    {
+      "first": "Luz Angela",
+      "last": "Garcia",
+      "company": "Repair Ventures, LLC",
+      "position": "Chief of Staff for Marketing and Data",
+      "icp_score": 65,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Red Rock (2012-2014)"
+    },
+    {
+      "first": "Miguel",
+      "last": "Espinosa",
+      "company": "Freelance",
+      "position": "Design Consultant & AI Product Co-founder",
+      "icp_score": 65,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Red Rock (2012-2014)"
+    },
+    {
+      "first": "Andres",
+      "last": "Colmenares",
+      "company": "Elisava School of Design and Engineering",
+      "position": "Director of MDRAI - Master in Design for Responsible AI",
+      "icp_score": 65,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Arquitectura (2009-2011)"
+    },
+    {
+      "first": "Daniel",
+      "last": "Puentes Prias",
+      "company": "Partners Academy",
+      "position": "Director of AI Architecture Program",
+      "icp_score": 65,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Vice peak (2015-2016)"
+    },
+    {
+      "first": "Diego",
+      "last": "Maldonado",
+      "company": "ONErpm",
+      "position": "SVP Intelligence | Data | Product",
+      "icp_score": 65,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Consultancy + TR (2021-2025)"
+    },
+    {
+      "first": "Paula",
+      "last": "Gamboa Acevedo",
+      "company": "AbbVie",
+      "position": "Associate Director, Data Strategy & Innovation",
+      "icp_score": 65,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Arquitectura (2009-2011)"
+    },
+    {
+      "first": "Joshua",
+      "last": "Castaño Fresen",
+      "company": "Laika Mascotas",
+      "position": "Chief Growth & Data Officer",
+      "icp_score": 65,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Red Rock (2012-2014)"
+    },
+    {
+      "first": "Tara",
+      "last": "DeMaio",
+      "company": "Thomson Reuters",
+      "position": "Director, Demand Generation - Campaign Activation",
+      "icp_score": 65,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": true,
+      "era": "SOUND era (2026)"
+    },
+    {
+      "first": "Sandra",
+      "last": "Montana",
+      "company": "Botero in China",
+      "position": "Director Shanghai Office",
+      "icp_score": 65,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Vice peak (2015-2016)"
+    },
+    {
+      "first": "Enzo",
+      "last": "Flores Bernal",
+      "company": "Sancho BBDO",
+      "position": "Head of Performance and Data / Lead Growth",
+      "icp_score": 65,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Vice peak (2015-2016)"
+    },
+    {
+      "first": "Francesca",
+      "last": "Maestro",
+      "company": "Maka Language Consulting",
+      "position": "Training Coordinator",
+      "icp_score": 65,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Red Rock (2012-2014)"
+    },
+    {
+      "first": "Juan Pablo",
+      "last": "Morales Sarmiento",
+      "company": "Nuevos Medios Producciones",
+      "position": "Chief Media&Sustainability Dev. Officer",
+      "icp_score": 65,
+      "endorsements": 0,
+      "mutual": false,
+      "email": true,
+      "recent": false,
+      "era": "Playground LATAM (2018-2020)"
+    },
+    {
+      "first": "Rebeca",
+      "last": "Muñoz García",
+      "company": "Acid House",
+      "position": "Director of Public Affairs",
+      "icp_score": 65,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Playground LATAM (2018-2020)"
+    },
+    {
+      "first": "Melissa",
+      "last": "Sánchez Díaz",
+      "company": "MSD LATAM",
+      "position": "Lead Safety Data Specialist",
+      "icp_score": 60,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Vice peak (2015-2016)"
+    },
+    {
+      "first": "Azucena",
+      "last": "Cabrera",
+      "company": "Thomson Reuters México",
+      "position": "Senior Marketer, Campaign Activation",
+      "icp_score": 60,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Consultancy + TR (2021-2025)"
+    },
+    {
+      "first": "Andoni",
+      "last": "Zarrabe Almela",
+      "company": "Ole Interactive",
+      "position": "Content & Creative Production Director LATAM",
+      "icp_score": 55,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Playground LATAM (2018-2020)"
+    },
+    {
+      "first": "NATALIA",
+      "last": "VARGAS",
+      "company": "CMI-Corporación Multi Inversiones",
+      "position": "Marketing Services and Digital Transformation  Director Latam",
+      "icp_score": 55,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Red Rock (2012-2014)"
+    },
+    {
+      "first": "Guillermo",
+      "last": "Rivero",
+      "company": "Netflix",
+      "position": "Director of Product Merchandising, Mexico + NOLA",
+      "icp_score": 55,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Vice peak (2015-2016)"
+    },
+    {
+      "first": "Marcy Alejandra",
+      "last": "Rangel Morales",
+      "company": "Ni Tan Tarde Productions",
+      "position": "Productora Local - Colombia",
+      "icp_score": 55,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Playground LATAM (2018-2020)"
+    },
+    {
+      "first": "Samantha",
+      "last": "Muñoz Orozco",
+      "company": "AirLife Chile",
+      "position": "Coordinadora de ventas y marketing",
+      "icp_score": 55,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Vice peak (2015-2016)"
+    },
+    {
+      "first": "Ryan",
+      "last": "Simone",
+      "company": "Betches Media",
+      "position": "Vice President, Data Strategy",
+      "icp_score": 45,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Consultancy + TR (2021-2025)"
+    },
+    {
+      "first": "Aleix",
+      "last": "Perdigó",
+      "company": "Goroka",
+      "position": "AI Creative Technologist",
+      "icp_score": 45,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Playground LATAM (2018-2020)"
+    },
+    {
+      "first": "Pablo",
+      "last": "Jara",
+      "company": "Salesforce",
+      "position": "Enterprise Account Executive, Strategic Accounts (Data, AI, & Analytics)",
+      "icp_score": 45,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Vice peak (2015-2016)"
+    },
+    {
+      "first": "Gilber Andrés",
+      "last": "Garzón Moreno",
+      "company": "Tough",
+      "position": "Digital Marketing Manager / Paid Media Consultant GCC",
+      "icp_score": 45,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Vice peak (2015-2016)"
+    },
+    {
+      "first": "Andres",
+      "last": "Espinosa Riera",
+      "company": "Ingram Micro",
+      "position": "Program Management & Partner Liaison",
+      "icp_score": 45,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Consultancy + TR (2021-2025)"
+    },
+    {
+      "first": "Laura",
+      "last": "Pinillos Collazos",
+      "company": "Frankfurt Zoological Society / Zoologische Gesellschaft Frankfurt",
+      "position": "Scientific Coordinator for Monitoring, Evaluation, and Learning",
+      "icp_score": 45,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Vice peak (2015-2016)"
+    },
+    {
+      "first": "Cristina",
+      "last": "Silva Hoyos",
+      "company": "Sphere Entertainment Co.",
+      "position": "Vice President Legal & Business Affairs",
+      "icp_score": 45,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Vice peak (2015-2016)"
+    },
+    {
+      "first": "María F",
+      "last": "Abadía",
+      "company": "The Hackett Group Inc.",
+      "position": "SLA - EEA ( MS - Ai )",
+      "icp_score": 45,
+      "endorsements": 0,
+      "mutual": false,
+      "email": true,
+      "recent": false,
+      "era": "Red Rock (2012-2014)"
+    },
+    {
+      "first": "Camilo",
+      "last": "Gonzalez",
+      "company": "Amazon Web Services (AWS)",
+      "position": "Data Architect, Data Lake & Analytics, Professional Services",
+      "icp_score": 45,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Vice peak (2015-2016)"
+    },
+    {
+      "first": "Santiago",
+      "last": "Restrepo",
+      "company": "aisherpa.me",
+      "position": "AI Productivity Consultant",
+      "icp_score": 45,
+      "endorsements": 0,
+      "mutual": false,
+      "email": false,
+      "recent": false,
+      "era": "Red Rock (2012-2014)"
+    }
+  ]
+};
+
+const NEON  = "#DFFF00";
+const PAPER = "#FFFFFF";
+const SOFT  = "#BDBDBD";
+const MUTED = "#6B6B6B";
+const LINE  = "#2A2A2A";
+
+// ----- Uploaded palettes (anchored at #DFFF00) -----
+const PAL_DIVERGENT = [
+  "#404020","#555530","#6B6B40","#818251","#999963","#B0B275","#C9CB88",
+  "#CED37B","#D3DC6D","#D7E45D","#DAED4B","#DDF634","#DFFF00"
+];
+const PAL_WARM = [
+  "#C03381","#E13E75","#FA5463","#FF714E","#FF9335","#FFB70E","#FBDC00","#DFFF00"
+];
+const PAL_COOL = [
+  "#FF44AB","#DB75FF","#69A8FF","#00D0FF","#00EBFF","#00FDC9","#34FF6C","#DFFF00"
+];
+
+// Sample a palette of N items from a ramp (linear interpolation across the ramp index)
+function rampPick(ramp, n) {
+  if (n <= 1) return [ramp[ramp.length-1]];
+  const out = [];
+  for (let i = 0; i < n; i++) {
+    const idx = Math.round(i * (ramp.length - 1) / (n - 1));
+    out.push(ramp[idx]);
+  }
+  return out;
+}
+const tooltip = d3.select("#tooltip");
+
+function showTip(html, e) {
+  tooltip.html(html)
+    .style("opacity", 1)
+    .style("left", (e.pageX + 14) + "px")
+    .style("top",  (e.pageY + 14) + "px");
+}
+function moveTip(e) {
+  tooltip.style("left", (e.pageX + 14) + "px")
+         .style("top",  (e.pageY + 14) + "px");
+}
+function hideTip() { tooltip.style("opacity", 0); }
+
+// -------- 1. TIMELINE (BAR + CUMULATIVE LINE) ------------------------
+try { (function timelineChart() {
+  const el = document.getElementById("timelineChart");
+  const W = el.clientWidth, H = 380;
+  const m = { top: 24, right: 40, bottom: 36, left: 40 };
+
+  const svg = d3.select(el).append("svg").attr("viewBox", `0 0 ${W} ${H}`).attr("width","100%");
+  const data = Object.entries(DATA.connections_by_year).map(([year,count]) => ({ year:+year, count }));
+  let cum = 0;
+  data.forEach(d => { d.cum = (cum += d.count); });
+
+  const x = d3.scaleBand().domain(data.map(d=>d.year)).range([m.left, W-m.right]).padding(0.18);
+  const y = d3.scaleLinear().domain([0, d3.max(data, d=>d.count)*1.1]).range([H-m.bottom, m.top]);
+  const yCum = d3.scaleLinear().domain([0, d3.max(data, d=>d.cum)]).range([H-m.bottom, m.top]);
+
+  // Grid
+  svg.append("g").selectAll("line")
+    .data(y.ticks(4)).enter().append("line")
+    .attr("x1", m.left).attr("x2", W-m.right)
+    .attr("y1", d=>y(d)).attr("y2", d=>y(d))
+    .attr("stroke", LINE).attr("stroke-width", 0.5);
+
+  // Bars · divergent ramp across time (oldest = olive, newest = neon)
+  const yearColors = rampPick(PAL_DIVERGENT, data.length);
+  svg.append("g").selectAll("rect")
+    .data(data).enter().append("rect")
+    .attr("x", d=>x(d.year)).attr("y", d=>y(d.count))
+    .attr("width", x.bandwidth()).attr("height", d=>y(0)-y(d.count))
+    .attr("fill", (d,i)=>yearColors[i])
+    .on("mouseenter", (e,d)=>showTip(`<strong>${d.year}</strong>${d.count} conexiones nuevas<br>Acumulado: ${d.cum}`, e))
+    .on("mousemove", moveTip).on("mouseleave", hideTip);
+
+  // Cumulative line
+  const line = d3.line().x(d=>x(d.year)+x.bandwidth()/2).y(d=>yCum(d.cum)).curve(d3.curveMonotoneX);
+  svg.append("path").datum(data).attr("d", line)
+    .attr("fill", "none").attr("stroke", PAPER).attr("stroke-width", 1.5).attr("stroke-dasharray","2,3");
+
+  svg.append("g").selectAll("circle")
+    .data(data).enter().append("circle")
+    .attr("cx", d=>x(d.year)+x.bandwidth()/2)
+    .attr("cy", d=>yCum(d.cum))
+    .attr("r", 2.2).attr("fill", PAPER);
+
+  // X axis
+  const xAxis = svg.append("g").attr("transform",`translate(0,${H-m.bottom})`)
+    .call(d3.axisBottom(x).tickValues(data.filter((d,i)=>i%2===0).map(d=>d.year)).tickSize(0).tickPadding(8));
+  xAxis.selectAll("text").attr("fill", SOFT).attr("font-family","'JetBrains Mono', monospace").attr("font-size","10px");
+  xAxis.selectAll("path,line").attr("stroke", LINE);
+
+  // Y axis (count)
+  const yAxis = svg.append("g").attr("transform",`translate(${m.left},0)`).call(d3.axisLeft(y).ticks(4).tickSize(0).tickPadding(6));
+  yAxis.selectAll("text").attr("fill", MUTED).attr("font-family","'JetBrains Mono', monospace").attr("font-size","10px");
+  yAxis.selectAll("path,line").attr("stroke", "transparent");
+
+  svg.append("text").attr("x", m.left).attr("y", m.top-6).attr("fill", NEON).attr("font-family","'JetBrains Mono', monospace").attr("font-size","9px").attr("letter-spacing","0.18em").text("CONEXIONES NUEVAS POR AÑO · LÍNEA DISCONTINUA = ACUMULADO");
+})(); } catch(e) { console.error('viz timelineChart failed:', e.message); }
+
+// -------- 2. ROLES TREEMAP -------------------------------------------
+try { (function treemapChart() {
+  const el = document.getElementById("treemapChart");
+  const W = el.clientWidth, H = 460;
+
+  const root = d3.hierarchy({
+    name: "roles",
+    children: [
+      { name: "Senior", children: [
+        { name: "CXO / Chief", value: DATA.role_keywords.cxo },
+        { name: "Directors",   value: DATA.role_keywords.directors },
+        { name: "Founders",    value: DATA.role_keywords.founders }
+      ]},
+      { name: "Operadores", children: [
+        { name: "Managers", value: DATA.role_keywords.managers }
+      ]},
+      { name: "Función", children: [
+        { name: "Marketing",      value: DATA.role_keywords.marketing },
+        { name: "Design / Creative", value: DATA.role_keywords.design_creative },
+        { name: "Product",        value: DATA.role_keywords.product },
+        { name: "Data / AI",      value: DATA.role_keywords.data_ai }
+      ]}
+    ]
+  }).sum(d=>d.value).sort((a,b)=>b.value-a.value);
+
+  d3.treemap().size([W,H]).paddingTop(22).paddingInner(2).round(true)(root);
+
+  const svg = d3.select(el).append("svg").attr("viewBox", `0 0 ${W} ${H}`).attr("width","100%");
+  // Cool palette · 8 distinct categorical hues anchored at neon
+  const palette = PAL_COOL;
+  let pIdx = 0;
+
+  // Group headers
+  svg.selectAll("g.group").data(root.children).enter().append("g").attr("class","group")
+    .each(function(d){
+      const g = d3.select(this);
+      g.append("rect")
+        .attr("x",d.x0).attr("y",d.y0).attr("width",d.x1-d.x0).attr("height",20)
+        .attr("fill","#000").attr("stroke", PAPER).attr("stroke-width",1);
+      g.append("text")
+        .attr("x", d.x0+8).attr("y", d.y0+13)
+        .attr("fill", NEON).attr("font-family","'JetBrains Mono', monospace")
+        .attr("font-size","10px").attr("letter-spacing","0.18em").text(d.data.name.toUpperCase());
+    });
+
+  // Leaves
+  const leaves = svg.selectAll("g.leaf").data(root.leaves()).enter().append("g").attr("class","leaf")
+    .on("mouseenter",(e,d)=>showTip(`<strong>${d.data.name}</strong>${d.value} conexiones<br>${d.parent.data.name}`,e))
+    .on("mousemove", moveTip).on("mouseleave", hideTip);
+
+  leaves.append("rect")
+    .attr("x",d=>d.x0).attr("y",d=>d.y0).attr("width",d=>d.x1-d.x0).attr("height",d=>d.y1-d.y0)
+    .attr("fill",(d,i)=>palette[i % palette.length]).attr("opacity",1)
+    .attr("stroke","#000").attr("stroke-width",1);
+
+  // Contrast-aware text: dark text on light fills, white text on dark fills.
+  // Compute relative luminance per cell and threshold at 0.5.
+  function luminance(hex){
+    const c = hex.replace("#","");
+    const r = parseInt(c.substr(0,2),16)/255;
+    const g = parseInt(c.substr(2,2),16)/255;
+    const b = parseInt(c.substr(4,2),16)/255;
+    const a = [r,g,b].map(v => v<=0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4));
+    return 0.2126*a[0] + 0.7152*a[1] + 0.0722*a[2];
+  }
+  function txtFill(i){
+    const hex = palette[i % palette.length];
+    return luminance(hex) > 0.5 ? "#0A0A0A" : "#FFFFFF";
+  }
+
+  leaves.append("text")
+    .attr("x",d=>d.x0+10).attr("y",d=>d.y0+22)
+    .attr("fill",(d,i)=>txtFill(i)).attr("fill-opacity",1)
+    .attr("font-family","'Inter', sans-serif")
+    .attr("font-size","13px").attr("font-weight","700")
+    .text(d=>d.data.name);
+
+  leaves.append("text")
+    .attr("x",d=>d.x0+10).attr("y",d=>d.y0+42)
+    .attr("fill",(d,i)=>txtFill(i)).attr("fill-opacity",1)
+    .attr("font-family","'JetBrains Mono', monospace")
+    .attr("font-size","18px").attr("font-weight","800")
+    .text(d=>d.value);
+})(); } catch(e) { console.error('viz treemapChart failed:', e.message); }
+
+// -------- 3. SCORE FUNNEL (HORIZONTAL STACK) -------------------------
+try { (function funnelChart() {
+  const el = document.getElementById("funnelChart");
+  const W = el.clientWidth, H = 200;
+  const m = { top: 30, right: 12, bottom: 40, left: 12 };
+  const svg = d3.select(el).append("svg").attr("viewBox", `0 0 ${W} ${H}`).attr("width","100%");
+  const total = DATA.total_connections;
+  const tiers = [
+    { key:"Tier A · 80+",   value:DATA.score_distribution.tier_a_80plus,   color:"#DFFF00", label:"PRIORIDAD MÁXIMA" },
+    { key:"Tier B · 60-79", value:DATA.score_distribution.tier_b_60_79,   color:"#FBDC00", label:"OUTREACH SEMANA 1" },
+    { key:"Tier C · 40-59", value:DATA.score_distribution.tier_c_40_59,   color:"#FF9335", label:"OUTREACH SEMANA 2" },
+    { key:"Tier D · <40",   value:DATA.score_distribution.tier_d_below40, color:"#404020", label:"ARCHIVO · NO OUTREACH" }
+  ];
+  let acc = m.left;
+  const innerW = W - m.left - m.right;
+  svg.append("text").attr("x", m.left).attr("y", 16).attr("fill", NEON)
+    .attr("font-family","'JetBrains Mono', monospace").attr("font-size","9px").attr("letter-spacing","0.18em")
+    .text("DISTRIBUCIÓN DE SCORE · ESCALA REAL · 1,342 = 100%");
+  tiers.forEach((t,i)=>{
+    const w = (t.value/total) * innerW;
+    svg.append("rect")
+      .attr("x", acc).attr("y", m.top)
+      .attr("width", Math.max(w, t.value > 0 ? 2 : 0))
+      .attr("height", H - m.top - m.bottom)
+      .attr("fill", t.color)
+      .attr("stroke", "#000").attr("stroke-width", 1)
+      .on("mouseenter", e => showTip(`<strong>${t.key}</strong>${t.value} conexiones · ${(t.value/total*100).toFixed(1)}%<br>${t.label}`, e))
+      .on("mousemove", moveTip).on("mouseleave", hideTip);
+    acc += w;
+  });
+  const priorWidth = (DATA.score_distribution.tier_b_60_79 + DATA.score_distribution.tier_c_40_59) / total * innerW;
+  svg.append("line")
+    .attr("x1", m.left + priorWidth).attr("x2", m.left + priorWidth)
+    .attr("y1", m.top - 6).attr("y2", H - m.bottom + 8)
+    .attr("stroke", PAPER).attr("stroke-width", 1).attr("stroke-dasharray","2,2");
+  svg.append("text")
+    .attr("x", m.left + priorWidth + 8).attr("y", H - m.bottom + 22)
+    .attr("fill", PAPER).attr("font-size","11px").attr("font-family","'JetBrains Mono', monospace")
+    .text("← 27 PRIORIZADOS");
+})(); } catch(e) { console.error('viz funnelChart failed:', e.message); }
+
+// -------- 3.5 WARMTH HEAT TABLE (signal × ICP alignment) -------------
+try { (function warmthHeat() {
+  const tbody = document.querySelector('#warmthHeatTable tbody');
+  if (!tbody) return;
+  // Cross-tab from CSV: warmth signal × ICP tier.
+  // ICP tier derived from icp_pts: >=12 alineado, >=6 parcial, else fuera.
+  const data = [
+    { label: "Relaciones mutuas", note: "endosos en ambas direcciones, relación más fuerte de la red", alineado: 1, parcial: 5, fuera: 4 },
+    { label: "Email directo",      note: "email visible en LinkedIn, path fuera del muro de InMail",       alineado: 3, parcial: 6, fuera: 30 },
+    { label: "Reinvitaciones",     note: "InMails y conexiones enviadas dentro de la ventana reciente",   alineado: 7, parcial: 10, fuera: 29 }
+  ];
+  // Color ramp: dark zinc → neon, log-scaled by cell value.
+  // Skip the darkest 4 steps so no cell renders near-black.
+  const ramp = ["#2a3318","#3a4520","#4d5a25","#62732c","#7a8e34","#94a83e","#b0c449","#c8d855","#dfff00"];
+  const allVals = data.flatMap(r => [r.alineado, r.parcial, r.fuera]);
+  const maxV = Math.max(...allVals);
+  const minV = 0;
+  function colorFor(v){
+    if (v <= 0) return "#161616";
+    const t = Math.log(1 + v) / Math.log(1 + maxV);
+    const idx = Math.min(ramp.length - 1, Math.max(0, Math.floor(t * (ramp.length - 1))));
+    return ramp[idx];
+  }
+  function txtFor(v){
+    if (v <= 0) return "#444";
+    const t = Math.log(1 + v) / Math.log(1 + maxV);
+    return t > 0.55 ? "#0A0A0A" : "#FFFFFF";
+  }
+  data.forEach(row => {
+    const total = row.alineado + row.parcial + row.fuera;
+    const tr = document.createElement('tr');
+    tr.className = 'border-t border-zinc-800';
+    tr.innerHTML = `
+      <td class="py-3 pr-4">
+        <div class="font-bold text-zinc-100 text-sm">${row.label}</div>
+        <div class="mono text-[10px] text-zinc-500 mt-1 leading-snug">${row.note}</div>
+      </td>
+      <td class="py-3 px-1"><div class="rounded text-center font-black text-2xl py-3" style="background:${colorFor(row.alineado)};color:${txtFor(row.alineado)}">${row.alineado}</div></td>
+      <td class="py-3 px-1"><div class="rounded text-center font-black text-2xl py-3" style="background:${colorFor(row.parcial)};color:${txtFor(row.parcial)}">${row.parcial}</div></td>
+      <td class="py-3 px-1"><div class="rounded text-center font-black text-2xl py-3" style="background:${colorFor(row.fuera)};color:${txtFor(row.fuera)}">${row.fuera}</div></td>
+      <td class="py-3 pl-2 text-right mono text-2xl font-black text-[#DFFF00]">${total}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+})(); } catch(e) { console.error('viz warmthHeat failed:', e.message); }
+
+// -------- 4. ERAS BAR -----------------------------------------------
+try { (function erasChart() {
+  const el = document.getElementById("erasChart");
+  const W = el.clientWidth, H = 360;
+  const m = { top: 24, right: 48, bottom: 24, left: 220 };
+  const data = Object.entries(DATA.era_distribution)
+    .map(([k,v])=>({ era:k, value:v }))
+    .sort((a,b)=>b.value-a.value);
+  const svg = d3.select(el).append("svg").attr("viewBox", `0 0 ${W} ${H}`).attr("width","100%");
+  const x = d3.scaleLinear().domain([0, d3.max(data, d=>d.value)]).range([m.left, W-m.right]);
+  const y = d3.scaleBand().domain(data.map(d=>d.era)).range([m.top, H-m.bottom]).padding(0.18);
+  svg.append("text").attr("x", m.left).attr("y", 14).attr("fill", NEON)
+    .attr("font-family","'JetBrains Mono', monospace").attr("font-size","9px").attr("letter-spacing","0.18em")
+    .text("ERA · CONEXIONES TOTALES");
+  svg.selectAll("rect").data(data).enter().append("rect")
+    .attr("x", m.left).attr("y", d=>y(d.era))
+    .attr("width", d=>x(d.value)-m.left).attr("height", y.bandwidth())
+    .attr("fill", d => DATA.era_color[d.era] || NEON)
+    .on("mouseenter",(e,d)=>showTip(`<strong>${d.era}</strong>${d.value} conexiones`,e))
+    .on("mousemove", moveTip).on("mouseleave", hideTip);
+  svg.selectAll("text.era-label").data(data).enter().append("text")
+    .attr("class","era-label")
+    .attr("x", m.left-12).attr("y", d=>y(d.era)+y.bandwidth()/2+4)
+    .attr("text-anchor","end").attr("fill", PAPER)
+    .attr("font-family","'Inter', sans-serif").attr("font-size","13px").attr("font-weight","600")
+    .text(d=>d.era);
+  svg.selectAll("text.value-label").data(data).enter().append("text")
+    .attr("class","value-label")
+    .attr("x", d=>x(d.value)+8).attr("y", d=>y(d.era)+y.bandwidth()/2+4)
+    .attr("fill", NEON).attr("font-family","'JetBrains Mono', monospace")
+    .attr("font-size","13px").attr("font-weight","700")
+    .text(d=>d.value);
+})(); } catch(e) { console.error('viz erasChart failed:', e.message); }
+
+// -------- 5. NETWORK GRAPH (HUB & SPOKE) -----------------------------
+try { (function networkChart() {
+  const el = document.getElementById("networkChart");
+  const mobileList = document.getElementById("networkMobileList");
+  const resetBtn = document.getElementById("networkReset");
+
+  // Always render the mobile list (always available below md breakpoint).
+  function renderMobileList(){
+    mobileList.innerHTML = "";
+    const sorted = [...DATA.top_30_leads].sort((a,b)=>b.icp_score-a.icp_score);
+    sorted.forEach(l => {
+      const eraColor = (DATA.era_color && DATA.era_color[l.era]) || "#888";
+      const eraShort = (l.era || "").replace(/\s*\([^)]*\)\s*$/, "");
+      const sigs = [];
+      if (l.mutual) sigs.push("MUTUAL");
+      if (l.email) sigs.push("EMAIL");
+      if (l.recent) sigs.push("RECIENTE");
+      const sigStr = sigs.length ? sigs.join(" · ") : "FRIO";
+      const scoreColor = l.icp_score>=60?'#DFFF00':l.icp_score>=40?'#c8d855':'#7a8e34';
+      const row = document.createElement('div');
+      row.className = 'flex items-center gap-3 py-3 border-b border-zinc-800';
+      row.innerHTML =
+        '<div class="mono text-base font-black" style="min-width:2.6em;text-align:right;color:'+scoreColor+'">'+l.icp_score+'</div>'+
+        '<div class="flex-1 min-w-0">'+
+          '<div class="text-zinc-100 font-semibold text-sm truncate">'+l.first+' '+l.last+'</div>'+
+          '<div class="text-zinc-500 text-xs truncate">'+l.position+' · '+l.company+'</div>'+
+        '</div>'+
+        '<div class="mono text-[9px] uppercase tracking-[0.18em] text-zinc-500 text-right" style="min-width:5.4em">'+
+          '<div>'+sigStr+'</div>'+
+          '<div class="flex items-center justify-end gap-1 mt-1">'+
+            '<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:'+eraColor+'"></span>'+
+            '<span class="text-zinc-600">'+eraShort.slice(0,12)+'</span>'+
+          '</div>'+
+        '</div>';
+      mobileList.appendChild(row);
+    });
+  }
+  renderMobileList();
+
+  // Decide layout by viewport.
+  function applyResponsiveLayout(){
+    const isMobile = window.innerWidth < 720;
+    el.style.display = isMobile ? "none" : "block";
+    mobileList.classList.toggle("hidden", isMobile);
+    if (resetBtn) resetBtn.style.display = isMobile ? "none" : "block";
+  }
+  applyResponsiveLayout();
+  window.addEventListener("resize", applyResponsiveLayout);
+
+  if (window.innerWidth < 720) {
+    return;
+  }
+
+  const W = el.clientWidth, H = 820;
+  el.style.minHeight = H + "px";
+  const svg = d3.select(el).append("svg").attr("viewBox", "0 0 " + W + " " + H).attr("width","100%").attr("height", H);
+
+  const root = svg.append("g").attr("class","chartRoot");
+
+  const center = { id:"NICO", x:W/2, y:H/2, r:38, fx:W/2, fy:H/2, isHub:true, era:null };
+  const nodes = [center, ...DATA.top_30_leads.map(l => ({
+    id: l.first + " " + l.last,
+    company: l.company,
+    position: l.position,
+    score: l.icp_score,
+    mutual: l.mutual,
+    endorsements: l.endorsements,
+    era: l.era,
+    r: 7 + (l.icp_score - 39) * 0.55,
+    isHub: false
+  }))];
+  const links = nodes.filter(n => !n.isHub).map(n => ({ source: "NICO", target: n.id, mutual: n.mutual }));
+  const sim = d3.forceSimulation(nodes)
+    .force("charge", d3.forceManyBody().strength(d=>d.isHub ? -260 : -160))
+    .force("link", d3.forceLink(links).id(d=>d.id).distance(d=>d.mutual ? 130 : 200).strength(0.6))
+    .force("center", d3.forceCenter(W/2, H/2))
+    .force("collide", d3.forceCollide(d=>d.r+5))
+    .alphaDecay(0.04);
+
+  const link = root.append("g").selectAll("line")
+    .data(links).enter().append("line")
+    .attr("stroke", d=>d.mutual ? NEON : "#3A3A3A")
+    .attr("stroke-width", d=>d.mutual ? 1.6 : 0.8)
+    .attr("stroke-dasharray", d=>d.mutual ? null : "2,3");
+
+  const node = root.append("g").selectAll("g.node")
+    .data(nodes).enter().append("g").attr("class","node")
+    .style("cursor","grab")
+    .on("mouseenter", (e,d)=>{
+      if (d.isHub) return showTip("<strong>Nico Borja</strong>centro de la red", e);
+      showTip("<strong>"+d.id+"</strong>"+d.position+"<br>"+d.company+" · score "+d.score+"<br>"+(d.mutual ? "RELACION MUTUA" : "Conexion simple")+" · "+d.era, e);
+    })
+    .on("mousemove", moveTip).on("mouseleave", hideTip);
+
+  node.append("circle")
+    .attr("r", d=>d.r)
+    .attr("fill", d => d.isHub ? NEON : (DATA.era_color[d.era] || "#888"))
+    .attr("stroke", PAPER).attr("stroke-width", d=>d.isHub ? 2.2 : 1);
+  node.append("text")
+    .attr("dy", d=>d.r + 14)
+    .attr("text-anchor","middle")
+    .attr("fill", d=>d.isHub ? NEON : PAPER)
+    .attr("font-family","'JetBrains Mono', monospace")
+    .attr("font-size", d=>d.isHub ? "12px" : "10px")
+    .attr("font-weight", d=>d.isHub ? "700" : "500")
+    .text(d=>d.isHub ? "NICO" : d.id.split(" ")[0].slice(0,11));
+
+  sim.on("tick", () => {
+    link.attr("x1", d=>d.source.x).attr("y1", d=>d.source.y)
+        .attr("x2", d=>d.target.x).attr("y2", d=>d.target.y);
+    node.attr("transform", d=>"translate("+d.x+","+d.y+")");
+  });
+
+  // Drag.
+  function dragstarted(e,d){ if (!e.active) sim.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; d3.select(this).style("cursor","grabbing"); }
+  function dragged(e,d){ d.fx = e.x; d.fy = e.y; }
+  function dragended(e,d){ if (!e.active) sim.alphaTarget(0); if (!d.isHub) { d.fx = null; d.fy = null; } d3.select(this).style("cursor","grab"); }
+  node.call(d3.drag().on("start", dragstarted).on("drag", dragged).on("end", dragended));
+
+  // Zoom + pan.
+  const zoom = d3.zoom().scaleExtent([0.4, 4]).on("zoom", (e) => {
+    root.attr("transform", e.transform);
+  });
+  svg.call(zoom);
+
+  if (resetBtn) {
+    resetBtn.addEventListener("click", () => {
+      svg.transition().duration(400).call(zoom.transform, d3.zoomIdentity);
+    });
+  }
+
+  const legend = d3.select("#networkLegend");
+  legend.html("");
+  Object.entries(DATA.era_color).forEach(([era,color])=>{
+    legend.append("div").attr("class","flex items-center gap-2")
+      .html('<span style="width:10px;height:10px;background:'+color+';display:inline-block;"></span><span class="text-zinc-400">'+era+'</span>');
+  });
+  legend.append("div").attr("class","flex items-center gap-2")
+    .html('<span style="width:18px;height:0;border-top:1.4px solid '+NEON+';display:inline-block;"></span><span class="text-zinc-400">Relacion mutua</span>');
+})(); } catch(e) { console.error('viz networkChart failed:', e.message); }
+
+// -------- 6. SKILLS BUBBLE PACK --------------------------------------
+try { (function skillsChart() {
+  const el = document.getElementById("skillsChart");
+  const W = el.clientWidth || 800, H = 520;
+  const root = d3.hierarchy({ name:"skills", children: Object.entries(DATA.top_skills).map(([k,v])=>({ name:k, value:v })) }).sum(d=>d.value);
+  d3.pack().size([W,H]).padding(8)(root);
+  const svg = d3.select(el).append("svg").attr("viewBox", "0 0 " + W + " " + H).attr("width","100%");
+
+  // Use the full divergent ramp but skip the 4 darkest steps so smallest
+  // bubbles never render near-black. Reversed so largest = neon.
+  const skillsPalette = PAL_DIVERGENT.slice(4).reverse();
+  const leaves = root.leaves().sort((a,b)=>b.value-a.value);
+  const colorByName = {};
+  leaves.forEach((leaf,i)=>{ colorByName[leaf.data.name] = skillsPalette[Math.min(i, skillsPalette.length-1)]; });
+
+  // Certifications cross-reference. Skills in this set get a lime border + check.
+  // Update DATA.certified_skills via the parser when Certifications.csv is read.
+  const CERTIFIED_SKILLS = (DATA.certified_skills || []).map(s => s.toLowerCase());
+  function hasCert(name){ return CERTIFIED_SKILLS.includes(name.toLowerCase()); }
+
+  function luminance(hex){
+    const c = hex.replace("#","");
+    const r = parseInt(c.substr(0,2),16)/255;
+    const g = parseInt(c.substr(2,2),16)/255;
+    const b = parseInt(c.substr(4,2),16)/255;
+    const a = [r,g,b].map(v => v<=0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4));
+    return 0.2126*a[0] + 0.7152*a[1] + 0.0722*a[2];
+  }
+  function txtFill(hex){ return luminance(hex) > 0.5 ? "#0A0A0A" : "#FFFFFF"; }
+
+  const nodes = svg.selectAll("g.bubble").data(root.leaves()).enter().append("g").attr("class","bubble")
+    .attr("transform", d=>"translate("+d.x+","+d.y+")")
+    .on("mouseenter",(e,d)=>{
+      const cert = hasCert(d.data.name) ? "<br>✓ con certificacion" : "";
+      showTip("<strong>"+d.data.name+"</strong>"+d.value+" endorsements"+cert, e);
+    })
+    .on("mousemove", moveTip).on("mouseleave", hideTip);
+
+  nodes.append("circle")
+    .attr("r", d=>d.r)
+    .attr("fill", d=>colorByName[d.data.name])
+    .attr("opacity", 1)
+    .attr("stroke", d => hasCert(d.data.name) ? NEON : "#000")
+    .attr("stroke-width", d => hasCert(d.data.name) ? 2 : 1);
+
+  function labelText(d){
+    if (d.r < 18) return "";
+    const cert = hasCert(d.data.name) ? " ✓" : "";
+    return d.data.name + cert;
+  }
+  function valueText(d){
+    if (d.r < 18) return "";
+    return d.value;
+  }
+
+  const labels = nodes.filter(d => d.r >= 18);
+  labels.append("rect")
+    .attr("class","label-bg")
+    .attr("rx", 3).attr("ry", 3)
+    .attr("fill", "#0A0A0A").attr("fill-opacity", 0.55);
+  labels.append("text")
+    .attr("class","name-text")
+    .attr("text-anchor","middle").attr("dy", -2)
+    .attr("fill", "#FFFFFF").attr("font-family","'Inter', sans-serif")
+    .attr("font-weight","700")
+    .attr("font-size", d => Math.min(Math.max(2*d.r/Math.max(d.data.name.length,4)*1.4, 9), 14) + "px")
+    .text(labelText);
+  labels.append("text")
+    .attr("class","value-text")
+    .attr("text-anchor","middle").attr("dy", 14)
+    .attr("fill", d => txtFill(colorByName[d.data.name]))
+    .attr("font-family","'JetBrains Mono', monospace")
+    .attr("font-weight","800")
+    .attr("font-size", d => Math.min(d.r/2, 18) + "px")
+    .text(valueText);
+
+  // Size the label-bg rect to fit name-text bounding box + padding.
+  labels.each(function(){
+    const g = d3.select(this);
+    const t = g.select("text.name-text").node();
+    if (!t) return;
+    try {
+      const bb = t.getBBox();
+      const pad = 5;
+      g.select("rect.label-bg")
+        .attr("x", bb.x - pad)
+        .attr("y", bb.y - pad/2)
+        .attr("width", bb.width + pad*2)
+        .attr("height", bb.height + pad);
+    } catch(_){}
+  });
+})(); } catch(e) { console.error('viz skillsChart failed:', e.message); }
+
+// -------- 7. TOP 30 LEADS TABLE --------------------------------------
+try { (function leadsTable() {
+  const tbody = document.getElementById("leadsTable");
+  const head = document.querySelector('#leadsTableEl thead');
+  function tierLabel(s){ return s>=80?"A":s>=60?"B":s>=40?"C":"D"; }
+
+  const scoreRamp = ["#1a1a14","#2a3318","#3a4520","#4d5a25","#62732c","#7a8e34","#94a83e","#b0c449","#c8d855","#dfff00"];
+  function scoreBg(s){
+    const t = Math.max(0, Math.min(1, s/100));
+    const eased = Math.pow(t, 0.6);
+    const idx = Math.min(scoreRamp.length-1, Math.floor(eased * (scoreRamp.length-1)));
+    return scoreRamp[idx];
+  }
+  function scoreFg(s){ return s >= 55 ? "#0A0A0A" : "#FFFFFF"; }
+  function tierRowTint(s){
+    if (s>=80) return "background:rgba(223,255,0,0.06)";
+    if (s>=60) return "background:rgba(223,255,0,0.03)";
+    if (s>=40) return "";
+    return "background:rgba(80,80,80,0.04)";
+  }
+
+  let leads = [...DATA.top_30_leads];
+  let sortKey = "icp_score";
+  let sortDir = "desc";
+
+  function render(){
+    tbody.innerHTML = "";
+    const sorted = [...leads].sort((a,b)=>{
+      const av = a[sortKey], bv = b[sortKey];
+      if (typeof av === "number" && typeof bv === "number") return sortDir==="desc"?bv-av:av-bv;
+      const as = String(av||"").toLowerCase(), bs = String(bv||"").toLowerCase();
+      if (as < bs) return sortDir==="desc"?1:-1;
+      if (as > bs) return sortDir==="desc"?-1:1;
+      return 0;
+    });
+    sorted.forEach(l => {
+      const sigs = [];
+      if (l.mutual) sigs.push('<span class="badge badge-warm">MUTUAL</span>');
+      if (l.endorsements > 0 && !l.mutual) sigs.push('<span class="badge badge-warm">'+l.endorsements+' END</span>');
+      if (l.email) sigs.push('<span class="badge badge-thin">EMAIL</span>');
+      if (l.recent) sigs.push('<span class="badge badge-thin">RECIENTE</span>');
+      const sigStr = sigs.join("") || '<span class="badge badge-cold">FRIO</span>';
+      const eraColor = (DATA.era_color && DATA.era_color[l.era]) || "#888";
+      const eraShort = (l.era || "").replace(/\s*\([^)]*\)\s*$/, "");
+      const rowTint = tierRowTint(l.icp_score);
+      tbody.insertAdjacentHTML("beforeend",
+        '<tr style="'+rowTint+'">'+
+          '<td class="mono py-2">'+
+            '<span style="display:inline-block;min-width:3.2em;text-align:center;padding:4px 8px;border-radius:4px;background:'+scoreBg(l.icp_score)+';color:'+scoreFg(l.icp_score)+';font-weight:800">'+l.icp_score+'</span>'+
+            '<span class="text-[10px] text-zinc-500 ml-1">('+tierLabel(l.icp_score)+')</span>'+
+          '</td>'+
+          '<td class="font-semibold">'+l.first+' '+l.last+'</td>'+
+          '<td class="text-zinc-300 text-sm">'+l.position+'</td>'+
+          '<td class="text-zinc-400 text-sm">'+l.company+'</td>'+
+          '<td class="text-zinc-300 text-xs">'+
+            '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:'+eraColor+';margin-right:6px;vertical-align:middle"></span>'+eraShort+
+          '</td>'+
+          '<td>'+sigStr+'</td>'+
+        '</tr>'
+      );
+    });
+    head.querySelectorAll('th[data-sort]').forEach(th => {
+      const arrow = th.querySelector('.sort-arrow');
+      if (arrow) arrow.remove();
+      if (th.dataset.sort === sortKey) {
+        const a = document.createElement('span');
+        a.className = 'sort-arrow';
+        a.textContent = sortDir==="desc" ? " ↓" : " ↑";
+        th.appendChild(a);
+      }
+    });
+  }
+
+  head.querySelectorAll('th[data-sort]').forEach(th => {
+    th.addEventListener('click', () => {
+      const k = th.dataset.sort;
+      if (sortKey === k) {
+        sortDir = sortDir === "desc" ? "asc" : "desc";
+      } else {
+        sortKey = k;
+        sortDir = (k === "icp_score") ? "desc" : "asc";
+      }
+      render();
+    });
+  });
+
+  render();
+})(); } catch(e) { console.error('viz leadsTable failed:', e.message); }
+</script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~
+
+# Node (in case anyone wraps with vite/etc later)
+node_modules/
+
+# Local environment
+.env
+.env.local
+.env.*.local
+
+# LinkedIn raw export ZIPs and contents (never commit your own data)
+linkedin-export*/
+*.csv.bak
+Connections.csv
+Skills.csv
+Endorsements.csv
+Profile.csv
+
+# Backup files from the Edit-truncation incident
+*.html.bak
+
+# Build artifacts
+dist/
+build/
+.cache/
+
+# Personal config (use config.example.json as template)
+config.json
+toolkit/config.json
