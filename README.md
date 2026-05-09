@@ -1,6 +1,8 @@
 # nicoborja-network
 
-Live site: https://network.nicoborja.com
+**Live**: [network.nicoborja.com](https://network.nicoborja.com)
+**Source**: this repo
+**License**: MIT, fork freely
 
 A read of my own LinkedIn network as data. 1,342 connections, 17 years, seven professional eras, scored against an ICP filter, ordered as the cola de outreach for the next 14 days.
 
@@ -10,6 +12,12 @@ This repo holds two things:
 2. **The toolkit** at `toolkit/` (parser + template + config + SKILL.md). What anyone else can use to generate their own version from their own LinkedIn export, locally, no server, no shared data.
 
 The site is the example. The toolkit is the actual tool.
+
+## Deploy
+
+Auto-deploys to Vercel on every push to `main`. Production URL is `network.nicoborja.com`.
+
+If you fork: connect Vercel to your fork, branch `main`, no build step needed. The site is static HTML + CSV.
 
 ---
 
