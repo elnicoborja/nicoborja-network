@@ -31,7 +31,7 @@
   .ord { color: var(--neon); font-family: 'JetBrains Mono', monospace; font-weight: 800; min-width: 2.4em; display: inline-block; }
   hr.rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
 
-  /* PRINT STYLESHEET — collapse to a 2-page A4/Letter PDF */
+  /* PRINT STYLESHEET, collapse to a 2-page A4/Letter PDF */
   @media print {
     @page { size: letter; margin: 0.5in; }
     html, body { background: #fff !important; color: #000 !important; }
@@ -66,7 +66,7 @@
     </div>
     <div class="mono text-[10px] uppercase tracking-[0.18em] text-zinc-500 text-right">
       <div>Nico Borja · hola@nicoborja.com</div>
-      <div class="mt-1">Día <span id="dayCounter">5</span> de 14 · ACTUALIZACIÓN DIARIA</div>
+      <div class="mt-1">Día <span id="dayCounter">7</span> de 14 · ACTUALIZACIÓN DIARIA</div>
     </div>
   </div>
 </header>
@@ -257,14 +257,34 @@ utm_content={asset}-{action}    # asset = checkup|network|substack|linkedin · a
         <span class="mono text-xs text-zinc-500">05_LAB10/digest.py</span>
       </div>
       <div class="panel p-6">
-        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-2 font-bold">LINKEDIN ADS (PAID)</div>
-        <p class="text-zinc-400 text-sm mb-2">2 variations active, $20.93 / $200 spent (D4), 1.89% CTR, $0.34 CPC.</p>
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-2 font-bold">LINKEDIN ADS (PAID, D4-D7)</div>
+        <p class="text-zinc-400 text-sm mb-2">TEDxBogotá Hook promoviendo Substack. $72.13 / $200 spent, 22,215 imp, 341 clicks, 1.53% CTR, $0.21 CPC, 0 conv.</p>
         <span class="mono text-xs text-zinc-500">Audience A · LATAM Cold</span>
       </div>
       <div class="panel p-6">
         <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-2 font-bold">INTERVIEW PACK (DRAFT, DÍA 5)</div>
-        <p class="text-zinc-400 text-sm mb-2">Diego Jaimes (d.strategy lab) + Juan Diego Ardila (Uniandes Faculty Architecture/Design). Outreach Día 5.</p>
+        <p class="text-zinc-400 text-sm mb-2">Diego Jaimes (d.strategy lab) + Juan Diego Ardila (Uniandes Faculty Architecture/Design). Outreach Día 5. Grabación reprogramada: Mié 13 may + Vie 15 may. Publica Jue 14 + Lun 18.</p>
         <span class="mono text-xs text-zinc-500">05_LAB10/ai-interview-pack.md</span>
+      </div>
+      <div class="panel p-6">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-2 font-bold">CARRUSEL DÍAS 1-3 (LIVE, DÍA 4)</div>
+        <p class="text-zinc-400 text-sm mb-2">Primera narrativa de la sprint. 8 slides, renderizado con Carousel Engine.</p>
+        <span class="mono text-xs text-zinc-500">05_LAB10/carousel-engine/days-1-3.html</span>
+      </div>
+      <div class="panel p-6">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-2 font-bold">MID-TRIAL CARRUSEL (LIVE, DÍA 7)</div>
+        <p class="text-zinc-400 text-sm mb-2">10 slides, mitad de camino, link explícito a Network + diagnóstico. Renderizado con Carousel Engine.</p>
+        <span class="mono text-xs text-zinc-500">05_LAB10/carousel-engine/days-7.html</span>
+      </div>
+      <div class="panel p-6">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-2 font-bold">LAB10 HUB (SOFT LAUNCH, DÍA 9)</div>
+        <p class="text-zinc-400 text-sm mb-2">Hub público con vista 3D de todos los artefactos del trial. Sort por timeline, hours, reach, community value. Carousel Engine embedded.</p>
+        <a class="lnk mono text-xs" href="https://lab10.nicoborja.com">lab10.nicoborja.com</a>
+      </div>
+      <div class="panel p-6">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-2 font-bold">MID-TRIAL UPDATE PDF (LIVE, DÍA 7)</div>
+        <p class="text-zinc-400 text-sm mb-2">Documento de 2 páginas subido a la página de aplicación de Lab10. Estado real al día 7.</p>
+        <span class="mono text-xs text-zinc-500">05_LAB10/mid-trial-may11/lab10-mid-trial-update.pdf</span>
       </div>
     </div>
   </div>
@@ -278,17 +298,17 @@ utm_content={asset}-{action}    # asset = checkup|network|substack|linkedin · a
     <div class="grid md:grid-cols-4 gap-4 mb-8">
       <div class="panel p-5">
         <div class="mono text-[10px] uppercase tracking-[0.22em] text-zinc-500 mb-2">SIGNUPS ATRIBUIBLES</div>
-        <div class="text-3xl font-black text-[#DFFF00]" id="metricSignups">—</div>
+        <div class="text-3xl font-black text-[#DFFF00]" id="metricSignups">0</div>
         <div class="mono text-[10px] text-zinc-600 mt-1">vía UTM, pendiente acceso GA4 Lab10</div>
       </div>
       <div class="panel p-5">
         <div class="mono text-[10px] uppercase tracking-[0.22em] text-zinc-500 mb-2">DIAGNÓSTICO COMPLETIONS</div>
-        <div class="text-3xl font-black text-[#DFFF00]" id="metricDiag">—</div>
-        <div class="mono text-[10px] text-zinc-600 mt-1">checkup.nicoborja.com</div>
+        <div class="text-3xl font-black text-[#DFFF00]" id="metricDiag">2</div>
+        <div class="mono text-[10px] text-zinc-600 mt-1">checkup.nicoborja.com, clicks medidos D7</div>
       </div>
       <div class="panel p-5">
         <div class="mono text-[10px] uppercase tracking-[0.22em] text-zinc-500 mb-2">LINKEDIN AD SPEND</div>
-        <div class="text-3xl font-black text-[#DFFF00]" id="metricSpend">$20.93</div>
+        <div class="text-3xl font-black text-[#DFFF00]" id="metricSpend">$72.13</div>
         <div class="mono text-[10px] text-zinc-600 mt-1">de $200 budget personal</div>
       </div>
       <div class="panel p-5">
