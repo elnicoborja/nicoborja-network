@@ -1,0 +1,9 @@
+# Default: allow indexing of the public site.
+User-agent: *
+Allow: /
+
+# Retrospectiva is public-but-unpromoted until the trial closes (2026-05-18).
+# Both meta-noindex and Disallow are in place. Remove these Disallow lines
+# after Day 14 if Nico decides to promote the document.
+Disallow: /retrospectiva.html
+Disallow: /retrospectiva

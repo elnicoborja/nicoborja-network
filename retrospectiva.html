@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex,nofollow" />
+<title>Retrospectiva · Lab10 Growth Suscripción Trial · Nico Borja</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #EDEAE3;
+    --neon:  #DFFF00;
+    --soft:  #C8C2B5;
+    --muted: #8C887F;
+    --line:  #2A2A2A;
+    --ground:#0A0A0A;
+  }
+  html, body { background: var(--ground); color: var(--paper); font-family: 'Inter', sans-serif; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  .panel { border: 1px solid var(--line); background: rgba(15,15,15,0.6); }
+  .container-x { max-width: 78rem; margin: 0 auto; padding: 0 1.5rem; }
+  .dot-grid {
+    background-image: radial-gradient(rgba(223,255,0,0.06) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+  a.lnk { color: var(--neon); text-decoration: underline; text-underline-offset: 3px; }
+  a.lnk:hover { background: var(--neon); color: #000; text-decoration: none; }
+  .tag { display: inline-block; padding: 2px 8px; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; border: 1px solid var(--line); }
+  .tag-warm { background: var(--neon); color: #000; border-color: var(--neon); }
+  .ord { color: var(--neon); font-family: 'JetBrains Mono', monospace; font-weight: 800; min-width: 2.4em; display: inline-block; }
+  hr.rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
+
+  /* PRINT STYLESHEET — collapse to a 2-page A4/Letter PDF */
+  @media print {
+    @page { size: letter; margin: 0.5in; }
+    html, body { background: #fff !important; color: #000 !important; }
+    .panel { background: #fff !important; border-color: #000 !important; }
+    .no-print { display: none !important; }
+    .print-only { display: block !important; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    a, a.lnk { color: #000 !important; text-decoration: underline !important; background: transparent !important; }
+    .text-zinc-300, .text-zinc-400, .text-zinc-500, .text-zinc-600 { color: #1a1a1a !important; }
+    .text-\[\#DFFF00\] { color: #000 !important; }
+    h1 { font-size: 18pt; }
+    h2 { font-size: 12pt; margin-top: 8pt; }
+    p, li { font-size: 9pt; line-height: 1.35; }
+    .print-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12pt; }
+    .print-page-break { page-break-before: always; }
+    section { padding: 0 !important; margin: 6pt 0 !important; }
+    body { font-family: 'Inter', sans-serif; }
+    .dot-grid { background: none; }
+    .tag { border: 1px solid #888; color: #000 !important; }
+  }
+  .print-only { display: none; }
+</style>
+</head>
+<body class="dot-grid">
+
+<!-- ============================ HEADER ============================ -->
+<header class="border-b border-zinc-800 py-6">
+  <div class="container-x flex items-center justify-between flex-wrap gap-3">
+    <div>
+      <div class="mono text-[10px] uppercase tracking-[0.24em] text-[#DFFF00]">RETROSPECTIVA · DOCUMENTO INTERNO</div>
+      <div class="mono text-[10px] uppercase tracking-[0.18em] text-zinc-500 mt-1">Lab10 Growth de Suscripción · Trial 14 días · 2026-05-05 → 2026-05-18</div>
+    </div>
+    <div class="mono text-[10px] uppercase tracking-[0.18em] text-zinc-500 text-right">
+      <div>Nico Borja · hola@nicoborja.com</div>
+      <div class="mt-1">Día <span id="dayCounter">5</span> de 14 · ACTUALIZACIÓN DIARIA</div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================ HERO ============================ -->
+<section class="py-12">
+  <div class="container-x">
+    <div class="mono text-[10px] uppercase tracking-[0.24em] text-[#DFFF00] mb-3">PRUEBA · GROWTH DE SUSCRIPCIÓN</div>
+    <h1 class="text-4xl md:text-6xl font-black leading-tight mb-6">
+      Cómo aprendí a vender<br>la comunidad de Lab10<span class="text-[#DFFF00]">.</span>
+    </h1>
+    <p class="text-zinc-300 text-base md:text-lg leading-relaxed max-w-3xl">
+      Documento vivo. Ingest, planning, adaptation, execution. Lo que hice, en qué orden, qué funcionó, qué no, qué aprendí sobre la comunidad de Lab10, y qué haría con el rol si me lo dan. Se actualiza cada día hasta el 18 de mayo. Imprimible como dos páginas para entrega formal.
+    </p>
+    <div class="mt-8 flex flex-wrap gap-2 mono text-[10px] uppercase tracking-[0.18em]">
+      <span class="tag tag-warm">KPI · 2,000 personas a la comunidad</span>
+      <span class="tag">presupuesto · 0</span>
+      <span class="tag">tiempo · 14 días</span>
+      <span class="tag">verificación · UTM + capturas</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 01 INGEST ============================ -->
+<section class="py-12 border-t border-zinc-800">
+  <div class="container-x">
+    <div class="mono text-[10px] uppercase tracking-[0.24em] text-[#DFFF00] mb-3">01 · INGEST</div>
+    <h2 class="text-3xl md:text-4xl font-black mb-6">Lo que recibí, lo que traje<span class="text-[#DFFF00]">.</span></h2>
+    <div class="grid md:grid-cols-2 gap-8">
+      <div class="panel p-6">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-3 font-bold">DEFINICIÓN OFICIAL DEL KPI</div>
+        <p class="text-zinc-300 text-sm leading-relaxed mb-3">Verbatim de la página de aplicación:</p>
+        <blockquote class="border-l-2 border-[#DFFF00] pl-4 mono text-xs text-zinc-200 leading-relaxed">
+          "Consigue 2,000 nuevas personas para la comunidad de Lab10. El objetivo es simple: sumar 2,000 personas nuevas a la comunidad de Lab10."
+        </blockquote>
+        <p class="text-zinc-400 text-sm leading-relaxed mt-3">
+          Membership de la comunidad, no followers en redes, no suscriptores de pago. Validable contra GA4 / formularios de Lab10 al cierre del trial.
+        </p>
+      </div>
+      <div class="panel p-6">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-3 font-bold">BASELINE OPERATIVA · DÍA 1</div>
+        <ul class="space-y-2 text-sm text-zinc-300">
+          <li><span class="mono text-[#DFFF00]">147,000</span> personas en la comunidad de Lab10 (cifra Lab10)</li>
+          <li><span class="mono text-[#DFFF00]">1,338</span> seguidores LinkedIn personales (Día 1)</li>
+          <li><span class="mono text-[#DFFF00]">1,342</span> conexiones LinkedIn (export oficial)</li>
+          <li><span class="mono text-[#DFFF00]">$200-400</span> presupuesto personal de pauta</li>
+          <li><span class="mono text-[#DFFF00]">~13.3%</span> de mis seguidores son Lab10 employees/alumni (declarado a Valentina)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-8 mt-8">
+      <div class="panel p-6">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-3 font-bold">STACK QUE TRAJE</div>
+        <ul class="space-y-2 text-sm text-zinc-300 leading-relaxed">
+          <li>Arquitectura BSc, Universidad de los Andes</li>
+          <li>Especialidad en Visualización de Datos, Centro CDMX (graduada mayo 2024)</li>
+          <li>13 años en marketing digital (2012-2025)</li>
+          <li>Stack técnico: Python stdlib, D3, vanilla HTML, Vercel</li>
+          <li>Asset histórico: 1,342 conexiones LinkedIn como dataset propio</li>
+          <li>Mi LinkedIn como surface de distribución (export oficial usado para scoring)</li>
+        </ul>
+      </div>
+      <div class="panel p-6">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-3 font-bold">SUPUESTOS QUE HICE</div>
+        <ul class="space-y-2 text-sm text-zinc-300 leading-relaxed">
+          <li>El rol final mide conversión free → suscriptor. El trial es upstream.</li>
+          <li>Calidad &gt; volumen. La rúbrica oficial lo confirma ("500 con estrategia brillante &gt; 2,000 con spam").</li>
+          <li>Sin presupuesto, la única vía es contenido + red propia + pauta personal mínima.</li>
+          <li>Hay un techo realista: 300-1,200 signups directos atribuibles a mí en 14 días.</li>
+          <li>Lo que se debe entregar al final NO es solo el número, sino el método y los aprendizajes sobre la comunidad.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 02 PLANNING ============================ -->
+<section class="py-12 border-t border-zinc-800">
+  <div class="container-x">
+    <div class="mono text-[10px] uppercase tracking-[0.24em] text-[#DFFF00] mb-3">02 · PLANNING</div>
+    <h2 class="text-3xl md:text-4xl font-black mb-6">Tres surfaces, un funnel<span class="text-[#DFFF00]">.</span></h2>
+    <p class="text-zinc-300 text-base leading-relaxed max-w-3xl mb-8">
+      Estrategia inicial (Día 1-2): construir tres assets reutilizables que dirigieran tráfico calificado a las puertas de Lab10. Cada uno con UTM trackeado para que la atribución fuera defendible al cierre del trial.
+    </p>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="panel p-6">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-3 font-bold">SURFACE 1 · DIAGNÓSTICO</div>
+        <p class="text-zinc-300 text-sm leading-relaxed">Quiz de 5 preguntas que rutea a 4 paths de Lab10 según ICP del usuario (principiante, builder, career, business). Bajo coste de attention para el visitante, alta especificidad de match. <a class="lnk" href="https://checkup.nicoborja.com">checkup.nicoborja.com</a></p>
+      </div>
+      <div class="panel p-6">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-3 font-bold">SURFACE 2 · NETWORK VIZ</div>
+        <p class="text-zinc-300 text-sm leading-relaxed">Análisis público de mi propia red de LinkedIn: 1,342 conexiones, 8 lecturas, scoring contra ICP. Sirve doble: contenido demostrativo + lead-magnet para el toolkit. <a class="lnk" href="https://network.nicoborja.com">network.nicoborja.com</a></p>
+      </div>
+      <div class="panel p-6">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-3 font-bold">SURFACE 3 · FRAMEWORK OSS</div>
+        <p class="text-zinc-300 text-sm leading-relaxed">El parser + template + SKILL.md liberados como toolkit MIT. Permite a cualquiera (incluyendo la comunidad de Lab10) generar su propio análisis. <a class="lnk" href="https://github.com/elnicoborja/nicoborja-network">github.com/elnicoborja/nicoborja-network</a></p>
+      </div>
+    </div>
+
+    <div class="panel p-6 mt-8">
+      <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-3 font-bold">UTM SCHEME (verbatim, attribution defensible)</div>
+      <pre class="mono text-xs text-zinc-300 leading-relaxed overflow-x-auto">utm_source=nicoborja
+utm_medium=referral
+utm_campaign=lab10-trial-2026-05
+utm_content={asset}-{action}    # asset = checkup|network|substack|linkedin · action = class|signup</pre>
+    </div>
+
+    <div class="panel p-6 mt-6">
+      <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-3 font-bold">PRINCIPIO METODOLÓGICO</div>
+      <p class="text-zinc-300 text-sm leading-relaxed">
+        Publicar el método de selección antes que el resultado del outreach es la versión sin ruido del growth: enseñar el filtro, no el embudo. Si el filtro está bien construido, los nombres correctos se vuelven obvios. Si no, ningún embudo lo arregla después. Esta tesis define qué surfaces son legítimas y cuáles son spam disfrazado.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 03 ADAPTATION ============================ -->
+<section class="py-12 border-t border-zinc-800">
+  <div class="container-x">
+    <div class="mono text-[10px] uppercase tracking-[0.24em] text-[#DFFF00] mb-3">03 · ADAPTATION</div>
+    <h2 class="text-3xl md:text-4xl font-black mb-6">Lo que se rompió y lo que aprendí<span class="text-[#DFFF00]">.</span></h2>
+    <div class="space-y-6">
+      <div class="panel p-6">
+        <div class="flex items-baseline gap-3 mb-3">
+          <span class="ord">04</span>
+          <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#FF714E] font-bold">PAWBOT PARQUEADO</div>
+        </div>
+        <p class="text-zinc-300 text-sm leading-relaxed">
+          Día 4. PawBot (cron diario en OpenClaw que iba a empujar 5 leads priorizados a Telegram para outreach manual) chocó contra una limitación del build 2026.4.8 desplegado en Railway: la integración de Telegram no está expuesta en esa versión. Después de ~90 minutos de debugging (resetear setup, intentar webhook, revisar BOT_TOKEN), parqueé el bot y construí un reemplazo en Python local en 30 minutos: <code class="mono text-[#DFFF00]">digest.py</code>, mismo output, cero dependencias. Lección: si la herramienta del otro no funciona en el momento, el operador no se queda esperando.
+        </p>
+      </div>
+      <div class="panel p-6">
+        <div class="flex items-baseline gap-3 mb-3">
+          <span class="ord">04</span>
+          <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#FF714E] font-bold">RELECTURA DE KPI</div>
+        </div>
+        <p class="text-zinc-300 text-sm leading-relaxed">
+          Día 4, intenté re-leer el KPI como "crecimiento de followers en redes" para tener un proxy publicly-measurable. Día 5 (mañana) revisé la página de aplicación y corregí: la cifra es membership de comunidad, no followers. La memoria del proyecto se actualizó al texto verbatim de Lab10. Lección sobre rigor: el contenido oficial del rol siempre supera mi interpretación, aún si la mía es más conveniente.
+        </p>
+      </div>
+      <div class="panel p-6">
+        <div class="flex items-baseline gap-3 mb-3">
+          <span class="ord">05</span>
+          <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#FF714E] font-bold">NETWORK VIZ MOBILE QA</div>
+        </div>
+        <p class="text-zinc-300 text-sm leading-relaxed">
+          Día 5, primer release del network viz pasó verificación desktop pero falló en móvil iPhone 15 Pro. Bug específico: un toggle de clase invertido escondía la lista mobile en vez de mostrarla. Iteración 2 corrige + agrega lista interactiva con checkboxes (top 10 activos por defecto, máximo 15, mini hub-spoke preview). Lección: QA en device físico es no negociable, simulador desktop no detecta este tipo de regresión.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 04 EXECUTION ============================ -->
+<section class="py-12 border-t border-zinc-800 no-print">
+  <div class="container-x">
+    <div class="mono text-[10px] uppercase tracking-[0.24em] text-[#DFFF00] mb-3">04 · EXECUTION · ASSETS LIVE</div>
+    <h2 class="text-3xl md:text-4xl font-black mb-6">Lo que está funcionando ahora<span class="text-[#DFFF00]">.</span></h2>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="panel p-6">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-2 font-bold">DIAGNÓSTICO (LIVE, DÍA 2)</div>
+        <p class="text-zinc-400 text-sm mb-2">Quiz de 5 preguntas → 4 paths a Lab10. UTM-tagged.</p>
+        <a class="lnk mono text-xs" href="https://checkup.nicoborja.com">checkup.nicoborja.com</a>
+      </div>
+      <div class="panel p-6">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-2 font-bold">NETWORK VIZ (LIVE, DÍA 4 + ITER 2 DÍA 5)</div>
+        <p class="text-zinc-400 text-sm mb-2">8 lecturas de la red, móvil interactivo, cert overlay.</p>
+        <a class="lnk mono text-xs" href="https://network.nicoborja.com">network.nicoborja.com</a>
+      </div>
+      <div class="panel p-6">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-2 font-bold">FRAMEWORK OSS (LIVE, DÍA 5)</div>
+        <p class="text-zinc-400 text-sm mb-2">Parser Python + template + SKILL.md. MIT.</p>
+        <a class="lnk mono text-xs" href="https://github.com/elnicoborja/nicoborja-network">github.com/elnicoborja/nicoborja-network</a>
+      </div>
+      <div class="panel p-6">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-2 font-bold">SUBSTACK ESPAÑOL (LIVE, DÍA 1)</div>
+        <p class="text-zinc-400 text-sm mb-2">Infodípity. Voz personal colombiana, 600 palabras.</p>
+        <a class="lnk mono text-xs" href="https://nicoborja.substack.com/p/infodipity-es-con-tilde">nicoborja.substack.com/p/infodipity-es-con-tilde</a>
+      </div>
+      <div class="panel p-6">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-2 font-bold">CAROUSEL ENGINE (INTERNAL)</div>
+        <p class="text-zinc-400 text-sm mb-2">HTML-to-PDF reusable carousel system con voice validator.</p>
+        <span class="mono text-xs text-zinc-500">05_LAB10/carousel-engine/</span>
+      </div>
+      <div class="panel p-6">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-2 font-bold">DIGEST.PY (INTERNAL · REPLACE PAWBOT)</div>
+        <p class="text-zinc-400 text-sm mb-2">Cron Python local Mon-Fri 9am Bogotá, push directo a Telegram API.</p>
+        <span class="mono text-xs text-zinc-500">05_LAB10/digest.py</span>
+      </div>
+      <div class="panel p-6">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-2 font-bold">LINKEDIN ADS (PAID)</div>
+        <p class="text-zinc-400 text-sm mb-2">2 variations active, $20.93 / $200 spent (D4), 1.89% CTR, $0.34 CPC.</p>
+        <span class="mono text-xs text-zinc-500">Audience A · LATAM Cold</span>
+      </div>
+      <div class="panel p-6">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-2 font-bold">INTERVIEW PACK (DRAFT, DÍA 5)</div>
+        <p class="text-zinc-400 text-sm mb-2">Diego Jaimes (d.strategy lab) + Juan Diego Ardila (Uniandes Faculty Architecture/Design). Outreach Día 5.</p>
+        <span class="mono text-xs text-zinc-500">05_LAB10/ai-interview-pack.md</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 05 RESULTS ============================ -->
+<section class="py-12 border-t border-zinc-800">
+  <div class="container-x">
+    <div class="mono text-[10px] uppercase tracking-[0.24em] text-[#DFFF00] mb-3">05 · RESULTADOS · ACTUALIZACIÓN DIARIA</div>
+    <h2 class="text-3xl md:text-4xl font-black mb-6">Lo que se mide<span class="text-[#DFFF00]">.</span></h2>
+    <div class="grid md:grid-cols-4 gap-4 mb-8">
+      <div class="panel p-5">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-zinc-500 mb-2">SIGNUPS ATRIBUIBLES</div>
+        <div class="text-3xl font-black text-[#DFFF00]" id="metricSignups">—</div>
+        <div class="mono text-[10px] text-zinc-600 mt-1">vía UTM, pendiente acceso GA4 Lab10</div>
+      </div>
+      <div class="panel p-5">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-zinc-500 mb-2">DIAGNÓSTICO COMPLETIONS</div>
+        <div class="text-3xl font-black text-[#DFFF00]" id="metricDiag">—</div>
+        <div class="mono text-[10px] text-zinc-600 mt-1">checkup.nicoborja.com</div>
+      </div>
+      <div class="panel p-5">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-zinc-500 mb-2">LINKEDIN AD SPEND</div>
+        <div class="text-3xl font-black text-[#DFFF00]" id="metricSpend">$20.93</div>
+        <div class="mono text-[10px] text-zinc-600 mt-1">de $200 budget personal</div>
+      </div>
+      <div class="panel p-5">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-zinc-500 mb-2">MULTIPLIERS CONTACTADOS</div>
+        <div class="text-3xl font-black text-[#DFFF00]" id="metricMult">2</div>
+        <div class="mono text-[10px] text-zinc-600 mt-1">Diego Jaimes, Juan Diego Ardila</div>
+      </div>
+    </div>
+    <div class="panel p-6">
+      <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-3 font-bold">NOTA SOBRE ATRIBUCIÓN</div>
+      <p class="text-zinc-300 text-sm leading-relaxed">
+        El acceso a GA4 de Lab10 está pendiente (ask enviado a Valentina). Los números de signups atribuibles se podrán conciliar al cierre del trial cuando Lab10 corra los reportes de UTM contra mi <code class="mono text-[#DFFF00]">utm_campaign=lab10-trial-2026-05</code>. Mientras tanto, los proxies disponibles son: completions del diagnóstico (instrumentado en mi GA4), engagement de los posts de LinkedIn y Substack, y ad-spend defensible. Si hay una métrica que Lab10 considera mejor proxy y a la que puedo tener visibilidad parcial, ajusto el reporte.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 06 CONVERSION STRATEGY ============================ -->
+<section class="py-12 border-t border-zinc-800">
+  <div class="container-x">
+    <div class="mono text-[10px] uppercase tracking-[0.24em] text-[#DFFF00] mb-3">06 · ESTRATEGIA DE CONVERSIÓN · SI ME CONTRATAN</div>
+    <h2 class="text-3xl md:text-4xl font-black mb-6">147,000 a $25/mes<span class="text-[#DFFF00]">.</span></h2>
+    <p class="text-zinc-300 text-base leading-relaxed max-w-3xl mb-4">
+      Tres vectores de conversión, cada uno apalanca y amplifica un asset que ya construí en este trial: el diagnóstico, el analizador de red, y el formato corto de entrevistas con operadores reales. La tesis común: convertir 147,000 personas a $25/mes no se hace optimizando el checkout, se hace haciendo que la versión gratuita sea tan útil que la versión pagada se vende sola.
+    </p>
+    <p class="mono text-[11px] uppercase tracking-[0.18em] text-zinc-500 mb-8">
+      Sustancia definida 2026-05-09 · lenguaje final por refinarse antes de submission Día 14
+    </p>
+    <div class="space-y-6">
+      <div class="panel p-6">
+        <div class="flex items-baseline gap-3 mb-3">
+          <span class="ord">A</span>
+          <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] font-bold">EMPODERAR EL STACK ACTUAL DE LAB10 CON SU PROPIA BI DATA</div>
+        </div>
+        <p class="text-zinc-300 text-sm leading-relaxed mb-3">
+          Tomar herramientas que ya existen en mi stack (diagnóstico, frameworks, skills) y conectarlas a la BI data interna de Lab10. Construir diagnósticos por sector y perfil específicamente para los segmentos más comprometidos de la comunidad. Activar campañas automáticas de contenido on-demand para reactivar usuarios pagos de cursos y suscriptores en riesgo de churn. Empaquetar todo como anchors de "give-away-for-free": el usuario recibe utilidad real sin pagar, pero el sign-up desbloquea la versión super-poderosa.
+        </p>
+        <ul class="text-zinc-300 text-sm leading-relaxed space-y-1 ml-4">
+          <li><span class="mono text-[#DFFF00]">→</span> Diagnósticos sector-específicos basados en BI de Lab10, no inventados desde cero</li>
+          <li><span class="mono text-[#DFFF00]">→</span> Reactivación automática de cohortes pagas en riesgo de churn vía contenido on-demand</li>
+          <li><span class="mono text-[#DFFF00]">→</span> Frameworks gratuitos como lead magnets, sign-up upgrade los hace super-poderosos</li>
+          <li><span class="mono text-[#DFFF00]">→</span> El diagnóstico que construí en este trial (checkup.nicoborja.com) es prototipo de la mecánica</li>
+        </ul>
+      </div>
+      <div class="panel p-6">
+        <div class="flex items-baseline gap-3 mb-3">
+          <span class="ord">B</span>
+          <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] font-bold">LINKEDIN TOOLKIT COMO PRODUCTO INTERNO + WHITELABEL B2B</div>
+        </div>
+        <p class="text-zinc-300 text-sm leading-relaxed mb-3">
+          El framework liberado en este trial (network.nicoborja.com + el toolkit OSS) es la base. Internamente para Lab10: integrar las redes de LinkedIn de todo el equipo en una sola vista, con un frente unificado de PawBots que entregan digest diario a los SDRs. Customizables por región, industria o producto. Externamente: empaquetar como producto whitelabel que las empresas-cliente compran para usar dentro de sus propias organizaciones, apalancando nuestro toolset como vehículo de "AI education growth" interno. Cada cliente whitelabel se vuelve también un canal de adopción de Lab10 para sus equipos.
+        </p>
+        <ul class="text-zinc-300 text-sm leading-relaxed space-y-1 ml-4">
+          <li><span class="mono text-[#DFFF00]">→</span> Front unificado de PawBots para SDRs de Lab10 (uso interno, BD)</li>
+          <li><span class="mono text-[#DFFF00]">→</span> Versión whitelabel para clientes B2B, deployable en su propio dominio</li>
+          <li><span class="mono text-[#DFFF00]">→</span> Customización por región, industria, producto sin código adicional</li>
+          <li><span class="mono text-[#DFFF00]">→</span> Cada licencia whitelabel onboardea a sus usuarios al ecosistema de Lab10</li>
+        </ul>
+      </div>
+      <div class="panel p-6">
+        <div class="flex items-baseline gap-3 mb-3">
+          <span class="ord">C</span>
+          <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] font-bold">"FRIENDS WITH AI" · ENTREVISTAS CORTAS DE WORKFLOW REAL</div>
+        </div>
+        <p class="text-zinc-300 text-sm leading-relaxed mb-3">
+          Serie corta de entrevistas con operadores fuera de Lab10 mostrando workflows reales de IA. La regla del formato: no hype, no demo. Cada entrevistado nombra una tarea concreta que está haciendo con IA, qué cambió, qué se rompió, y un dolor del aprendizaje "autónomo" (sin comunidad) que está experimentando. Lab10 es la respuesta implícita a ese dolor. Las primeras dos entrevistas (Diego Jaimes en estrategia de marketing, Juan Diego Ardila en arquitectura y diseño) ya están agendadas como parte de este trial.
+        </p>
+        <ul class="text-zinc-300 text-sm leading-relaxed space-y-1 ml-4">
+          <li><span class="mono text-[#DFFF00]">→</span> Operadores reales fuera de Lab10, no influencers ni voceros</li>
+          <li><span class="mono text-[#DFFF00]">→</span> Cada clip surface un pain point del aprender IA en solitario que Lab10 resuelve</li>
+          <li><span class="mono text-[#DFFF00]">→</span> Doble función, contenido distribuíble + market research de necesidades reales</li>
+          <li><span class="mono text-[#DFFF00]">→</span> Bandera implícita: "esta gente lo está logrando, vente con la comunidad que los habilita"</li>
+        </ul>
+      </div>
+    </div>
+    <p class="mono text-[11px] text-zinc-500 mt-6 leading-relaxed">
+      Los tres vectores se refuerzan entre sí: el diagnóstico (A) genera leads cualificados para el toolkit (B), el toolkit deja huellas que las entrevistas (C) transforman en pruebas sociales, y los testimonios de las entrevistas alimentan el funnel de A. La métrica común no es signups del primer mes, es retention al mes 6: el churn temprano destruye más LTV que cualquier optimización de funnel, y las tres tácticas están diseñadas para que la conversión inicial venga ya con la razón de quedarse.
+    </p>
+  </div>
+</section>
+
+
+<!-- ============================ 07 TIME + SIGN-OFF ============================ -->
+<section class="py-12 border-t border-zinc-800">
+  <div class="container-x">
+    <div class="mono text-[10px] uppercase tracking-[0.24em] text-[#DFFF00] mb-3">07 · TIEMPO Y CIERRE</div>
+    <h2 class="text-3xl md:text-4xl font-black mb-6">Cuánto tomó<span class="text-[#DFFF00]">.</span></h2>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="panel p-6">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-3 font-bold">DÍAS ELAPSED</div>
+        <div class="text-4xl font-black text-zinc-100" id="daysElapsed">5 / 14</div>
+        <p class="text-zinc-500 text-xs mt-2 leading-relaxed">Inicio: 2026-05-05 (Lun) · Cierre: 2026-05-18 (Lun)</p>
+      </div>
+      <div class="panel p-6">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-3 font-bold">HORAS ESTIMADAS</div>
+        <div class="text-4xl font-black text-zinc-100" id="hoursEstimated">~70</div>
+        <p class="text-zinc-500 text-xs mt-2 leading-relaxed">A ritmo de ~10-12h/día en surfaces, content, debugging.</p>
+      </div>
+      <div class="panel p-6">
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-3 font-bold">CEILING ESTIMADO</div>
+        <div class="text-4xl font-black text-zinc-100">300-1,200</div>
+        <p class="text-zinc-500 text-xs mt-2 leading-relaxed">Realistic signups/14 días con red personal y ad-spend &lt;$400.</p>
+      </div>
+    </div>
+
+    <div class="mt-12 panel p-6">
+      <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-3 font-bold">FIRMA</div>
+      <p class="text-zinc-300 text-sm leading-relaxed">
+        Si me eligen para el rol, este documento es el plan de las primeras 4 semanas. Si no, este documento es la prueba de que se puede hacer growth honesto en 14 días con stack de un operador, no de un equipo. En ambos casos, está disponible para cualquier persona que quiera replicar el método.
+      </p>
+      <p class="mono text-[11px] uppercase tracking-[0.22em] text-[#DFFF00] mt-6">Net results, sin ruido.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="py-10 border-t border-zinc-800">
+  <div class="container-x mono text-[10px] uppercase tracking-[0.18em] text-zinc-600 flex flex-wrap items-center justify-between gap-3">
+    <span>Documento vivo · actualizado 2026-05-09</span>
+    <span>Nico Borja · hola@nicoborja.com</span>
+    <span>NOINDEX hasta cierre del trial · 2026-05-18</span>
+  </div>
+</footer>
+
+<script>
+  // Day counter is auto-computed from start date.
+  (function(){
+    const start = new Date("2026-05-05T00:00:00-05:00");
+    const now = new Date();
+    const ms = now - start;
+    const day = Math.max(1, Math.min(14, Math.floor(ms / 86400000) + 1));
+    const e = document.getElementById("dayCounter");
+    if (e) e.textContent = day;
+    const e2 = document.getElementById("daysElapsed");
+    if (e2) e2.textContent = day + " / 14";
+  })();
+</script>
+</body>
+</html>
