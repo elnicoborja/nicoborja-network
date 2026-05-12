@@ -148,17 +148,16 @@
     <div class="grid md:grid-cols-2 gap-10 items-start">
       <div class="manifesto text-lg md:text-xl text-zinc-300 leading-relaxed max-w-xl">
         <div class="stanza">
-          <p>No se cuenta. Se navega.</p>
-          <p>No se marketea. Se activa.</p>
+          <p>Soy Nico Borja. Hace 17 años empecé a guardar contactos en LinkedIn sin pensarlo demasiado. Hoy son 1,342 personas, ordenadas por la vida laboral que las puso en mi camino.</p>
         </div>
         <div class="stanza">
-          <p>Cada conexión es un capítulo profesional</p>
-          <p>con nombre, contexto y fecha.</p>
+          <p>Esta página es un mapa de esa red. Cada punto es una persona, con su nombre, su empresa y la etapa en la que nos conectamos.</p>
         </div>
         <div class="stanza">
-          <p>Lo que se lee abajo es eso: la materia prima,</p>
-          <p>no el inventario. El método para leerla,</p>
-          <p>no el resultado de venderla.</p>
+          <p>Lo que ves abajo no es una lista de clientes ni un público para vender. Es la materia prima de mi historia profesional, leída como datos.</p>
+        </div>
+        <div class="stanza">
+          <p>El método para leerla es público. El código también, en MIT abierto. Cualquiera puede correr esta misma vista sobre su propia red, local en su computadora, sin compartir nada con nadie.</p>
         </div>
         <div class="stanza">
           <p class="mono text-sm uppercase tracking-[0.2em] text-[#DFFF00] mt-6">Net results, sin ruido.</p>
@@ -237,7 +236,7 @@
       El filtro de valor real es brutal<span class="text-[#DFFF00]">.</span>
     </h2>
     <p class="text-zinc-400 text-base md:text-lg mb-10 max-w-3xl leading-relaxed">
-      Cada conexión se puntúa de 0 a 100 sobre cuatro señales: seniority, ICP fit, pista LATAM, warmth. Sólo 27 superan el umbral. Eso no es debilidad de la red. Es la calidad del filtro. La proporción que se ve abajo es a escala real.
+      Cada conexión se puntúa de 0 a 100 sobre cuatro señales relacionadas con este reto específico: seniority, ICP fit, pista LATAM, warmth. 27 personas pasan el umbral para outreach directo en estos 14 días. Las demás 1,315 forman la red de contexto: mentores, colegas, referidores potenciales, gente que ya me acompañó y vuelve a aparecer en otros caminos. El score es contextual al reto, no jerárquico.
     </p>
     <div class="panel-deep p-6">
       <div id="funnelChart" style="min-height: 280px;"></div>
@@ -245,7 +244,7 @@
         <div><span class="text-[#DFFF00] text-2xl font-black mono">0</span><br><span class="text-zinc-400">Tier A · 80+</span></div>
         <div><span class="text-[#DFFF00] text-2xl font-black mono">2</span><br><span class="text-zinc-400">Tier B · 60-79</span></div>
         <div><span class="text-[#DFFF00] text-2xl font-black mono">25</span><br><span class="text-zinc-400">Tier C · 40-59</span></div>
-        <div><span class="text-zinc-500 text-2xl font-black mono">1,315</span><br><span class="text-zinc-400">Tier D · &lt;40</span></div>
+        <div title="Tier D = personas con menor encaje ICP para este reto Lab10 específico, no menor valor profesional. Muchas son colegas, mentores, amigos y red de soporte que activan otros caminos (referidos, oportunidades futuras, contexto). El score es contextual, no jerárquico."><span class="text-zinc-300 text-2xl font-black mono">1,315</span><br><span class="text-zinc-400">Tier D · &lt;40 · red de contexto</span></div>
       </div>
     </div>
   </div>
@@ -336,7 +335,7 @@
       Endorsements como espejo<span class="text-[#DFFF00]">.</span>
     </h2>
     <p class="text-zinc-400 text-base md:text-lg mb-10 max-w-3xl leading-relaxed">
-      Tamaño de la burbuja = endorsements recibidos. La mayoría vienen de la era arquitectura, diseño y marketing pre-AI. Hay un trabajo de actualización pendiente y este reto es parte de él. Las skills con borde lima y check (✓) están respaldadas por una certificación formal: dos de Google Ads (Skillshop, 2023-2024) y siete de LinkedIn Learning (Strategic Thinking, Leading Strategically, Cross-Selling, 360-Degree Feedback, Performance Management, entre otras). Endosos sin cert son válidos pero el cert es la prueba contrastable.
+      Tamaño de la burbuja = endorsements recibidos. La mayoría vienen de la era arquitectura, diseño y marketing pre-AI. Las skills con borde lima y check (✓) cuentan como certificadas en este marco bajo dos criterios. Primero, certificación formal: dos de Google Ads (Skillshop, 2023-2024) y siete de LinkedIn Learning (Strategic Thinking, Leading Strategically, Cross-Selling, 360-Degree Feedback, Performance Management, entre otras). Segundo, aval de comunidad: tres o más endosos recibidos en la red. En el marco SOUND el aval de comunidad es tan válido como un diploma formal, porque corresponde a personas que efectivamente trabajaron con la skill. Próximas extensiones del ramp: tenure de 2+ años en una industria en empresas con LinkedIn activo, diplomas universitarios (bachelor, técnico, online).
     </p>
     <div class="panel-deep p-4 md:p-6">
       <div id="skillsChart" style="min-height: 480px;"></div>
@@ -1130,10 +1129,9 @@ try { (function treemapChart() {
     const b = parseInt(c.substr(4,2),16)/255;
     return Math.sqrt(0.299*r*r + 0.587*g*g + 0.114*b*b);
   }
-  function txtFill(i){
-    const hex = palette[i % palette.length];
-    return perceivedBrightness(hex) > 0.5 ? "#0A0A0A" : "#FFFFFF";
-  }
+  // Force black text on all treemap cells, the cool palette is high-luminance enough
+  // that black is always more legible than white (per user feedback May 11).
+  function txtFill(i){ return "#0A0A0A"; }
 
   // Abbreviate long labels when the cell is narrow (mobile / small cells).
   function labelFor(name, cellW){
@@ -1171,7 +1169,7 @@ try { (function funnelChart() {
     { key:"Tier A · 80+",   value:DATA.score_distribution.tier_a_80plus,   color:"#DFFF00", label:"PRIORIDAD MÁXIMA" },
     { key:"Tier B · 60-79", value:DATA.score_distribution.tier_b_60_79,   color:"#FBDC00", label:"OUTREACH SEMANA 1" },
     { key:"Tier C · 40-59", value:DATA.score_distribution.tier_c_40_59,   color:"#FF9335", label:"OUTREACH SEMANA 2" },
-    { key:"Tier D · <40",   value:DATA.score_distribution.tier_d_below40, color:"#404020", label:"ARCHIVO · NO OUTREACH" }
+    { key:"Tier D · <40",   value:DATA.score_distribution.tier_d_below40, color:"#404020", label:"RED DE CONTEXTO" }
   ];
   let acc = m.left;
   const innerW = W - m.left - m.right;
@@ -1547,10 +1545,18 @@ try { (function skillsChart() {
   const colorByName = {};
   leaves.forEach((leaf,i)=>{ colorByName[leaf.data.name] = skillsPalette[Math.min(i, skillsPalette.length-1)]; });
 
-  // Certifications cross-reference. Skills in this set get a lime border + check.
-  // Source: DATA.certified_skills (populated from LinkedIn Certifications.csv).
+  // Certification ramp, expanded May 11 to acknowledge community validation:
+  //   1. Listed in DATA.certified_skills (formal certs: Skillshop, LinkedIn Learning).
+  //   2. 3 or more endorsements from the network (community-approved skill).
+  //   3. (Future) Industry tenure 2+ years at companies with active LinkedIn presence.
+  //   4. (Future) University diplomas (bachelor, technical, online).
+  // Community endorsement counts as valid as a formal diploma.
   const CERTIFIED_SKILLS = (DATA.certified_skills || []).map(s => s.toLowerCase());
-  function hasCert(name){ return CERTIFIED_SKILLS.includes(name.toLowerCase()); }
+  function hasCert(name, endorsements){
+    if (CERTIFIED_SKILLS.includes(name.toLowerCase())) return "formal";
+    if ((endorsements || 0) >= 3) return "community";
+    return false;
+  }
 
   // HSP perceived-brightness for contrast (matches treemap method).
   function perceivedBrightness(hex){
@@ -1565,7 +1571,8 @@ try { (function skillsChart() {
   const nodes = svg.selectAll("g.bubble").data(root.leaves()).enter().append("g").attr("class","bubble")
     .attr("transform", d=>"translate("+d.x+","+d.y+")")
     .on("mouseenter",(e,d)=>{
-      const cert = hasCert(d.data.name) ? "<br>✓ con certificación" : "";
+      const certKind = hasCert(d.data.name, d.value);
+      const cert = certKind === "formal" ? "<br>✓ certificación formal" : (certKind === "community" ? "<br>✓ aval de comunidad (3+ endosos)" : "");
       showTip("<strong>"+d.data.name+"</strong>"+d.value+" endorsements"+cert, e);
     })
     .on("mousemove", moveTip).on("mouseleave", hideTip);
@@ -1574,12 +1581,12 @@ try { (function skillsChart() {
     .attr("r", d=>d.r)
     .attr("fill", d=>colorByName[d.data.name])
     .attr("opacity", 1)
-    .attr("stroke", d => hasCert(d.data.name) ? NEON : "#000")
-    .attr("stroke-width", d => hasCert(d.data.name) ? 2 : 1);
+    .attr("stroke", d => hasCert(d.data.name, d.value) ? NEON : "#000")
+    .attr("stroke-width", d => hasCert(d.data.name, d.value) ? 2 : 1);
 
   function labelText(d){
     if (d.r < 18) return "";
-    const cert = hasCert(d.data.name) ? " ✓" : "";
+    const cert = hasCert(d.data.name, d.value) ? " ✓" : "";
     return d.data.name + cert;
   }
   function valueText(d){
