@@ -1009,7 +1009,7 @@ try { (function timelineChart() {
   // Sized to fit 17 years comfortably on mobile and desktop alike.
   const W = el.clientWidth || 800;
   const rowH = 22;
-  const m = { top: 28, right: 56, bottom: 16, left: 56 };
+  const m = { top: 44, right: 80, bottom: 16, left: 56 };
   const H = m.top + m.bottom + data.length * rowH;
   el.style.minHeight = H + "px";
 
@@ -1057,11 +1057,67 @@ try { (function timelineChart() {
     .attr("font-family","'JetBrains Mono', monospace").attr("font-size","11px").attr("font-weight","700")
     .text(d=>d.count);
 
+  // -------- CUMULATIVE LINE OVERLAY (bright pink, secondary X scale) --
+  const PINK = "#FF44AB"; // Arquitectura era color, kept consistent across viz
+  const cumMax = data[data.length - 1].cum;
+  const xCum = d3.scaleLinear()
+    .domain([0, cumMax * 1.02])
+    .range([m.left, W - m.right]);
+
+  // Top secondary axis ticks for cumulative scale
+  const cumTicks = xCum.ticks(4);
+  svg.append("g").selectAll("text.cumTick")
+    .data(cumTicks).enter().append("text").attr("class","cumTick")
+    .attr("x", d => xCum(d)).attr("y", m.top - 4)
+    .attr("text-anchor", "middle")
+    .attr("fill", PINK).attr("font-family", "'JetBrains Mono', monospace")
+    .attr("font-size", "9px").attr("opacity", 0.7)
+    .text(d => d.toLocaleString());
+
+  // Cumulative line path
+  const lineGen = d3.line()
+    .x(d => xCum(d.cum))
+    .y(d => y(d.year) + y.bandwidth() / 2)
+    .curve(d3.curveMonotoneY);
+  svg.append("path")
+    .datum(data)
+    .attr("d", lineGen)
+    .attr("fill", "none")
+    .attr("stroke", PINK)
+    .attr("stroke-width", 2)
+    .attr("stroke-opacity", 0.9);
+
+  // Cumulative dots at each year for legibility on mobile
+  svg.append("g").selectAll("circle.cumDot")
+    .data(data).enter().append("circle").attr("class","cumDot")
+    .attr("cx", d => xCum(d.cum))
+    .attr("cy", d => y(d.year) + y.bandwidth() / 2)
+    .attr("r", 3)
+    .attr("fill", PINK)
+    .on("mouseenter", (e,d) => showTip("<strong>"+d.year+"</strong>Acumulado: "+d.cum.toLocaleString()+"<br>Nuevas en el año: "+d.count, e))
+    .on("mousemove", moveTip).on("mouseleave", hideTip);
+
+  // Cumulative label at the final point
+  const last = data[data.length - 1];
+  svg.append("text")
+    .attr("x", xCum(last.cum) - 6).attr("y", y(last.year) + y.bandwidth() / 2 - 8)
+    .attr("text-anchor", "end")
+    .attr("fill", PINK).attr("font-family", "'JetBrains Mono', monospace")
+    .attr("font-size", "11px").attr("font-weight", "700")
+    .text(last.cum.toLocaleString() + " acumulado");
+
   // Title
-  svg.append("text").attr("x", m.left).attr("y", m.top-10)
+  svg.append("text").attr("x", m.left).attr("y", m.top-22)
     .attr("fill", NEON).attr("font-family","'JetBrains Mono', monospace")
     .attr("font-size","9px").attr("letter-spacing","0.18em")
     .text("CONEXIONES NUEVAS POR AÑO · 2009 → 2026");
+
+  // Legend for the pink line
+  svg.append("text").attr("x", W - m.right).attr("y", m.top-22)
+    .attr("text-anchor", "end")
+    .attr("fill", PINK).attr("font-family","'JetBrains Mono', monospace")
+    .attr("font-size","9px").attr("letter-spacing","0.18em")
+    .text("● ACUMULADO");
 })(); } catch(e) { console.error('viz timelineChart failed:', e.message); }
 
 // -------- 2. ROLES TREEMAP -------------------------------------------
