@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex,nofollow" />
+<title>Retrospectiva · Lab10 Growth Suscripción Trial · Nico Borja · Versión papel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;0,6..72,800;1,6..72,400;1,6..72,500;1,6..72,600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* === ElSoundSystem · Editorial Paper Mode ====================== */
+  :root {
+    --paper:    #FAFAF7;
+    --ink:      #0A0A0A;
+    --ink-soft: #1a1a1a;
+    --ink-mid:  #4a4a4a;
+    --ink-low:  #767676;
+    --gray:     #e5e5e5;
+    --lime:     #cfff04;
+    --teal:     #003A3A;
+    --line:     #d4d3cc;
+
+    --serif: 'Newsreader', Georgia, serif;
+    --sans:  'DM Sans', system-ui, sans-serif;
+    --mono:  'JetBrains Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* SCREEN: a comfortable paper card centered on a neutral surround */
+  @media screen {
+    body { padding: 28px; background: #ECEAE3; min-height: 100vh; }
+    .page {
+      max-width: 8.5in;
+      margin: 0 auto 28px;
+      background: var(--paper);
+      box-shadow: 0 18px 60px rgba(10,10,10,0.18);
+      padding: 0.6in 0.65in;
+      min-height: 11in;
+      position: relative;
+    }
+    .toolbar {
+      position: sticky; top: 18px; z-index: 99;
+      max-width: 8.5in; margin: 0 auto 18px;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 14px;
+      background: var(--paper); border: 1px solid var(--line);
+      font-family: var(--mono); font-size: 11px;
+      text-transform: uppercase; letter-spacing: 0.18em;
+      color: var(--ink-mid);
+    }
+    .toolbar a {
+      color: var(--teal); text-decoration: underline; text-underline-offset: 3px;
+    }
+    .toolbar button {
+      background: var(--lime); border: 1px solid var(--lime);
+      padding: 8px 14px; color: var(--ink); font-family: var(--mono);
+      font-size: 11px; font-weight: 700; letter-spacing: 0.18em;
+      text-transform: uppercase; cursor: pointer;
+    }
+  }
+
+  /* PRINT: hide toolbar, remove surround, paper edge-to-edge, page breaks */
+  @page { size: letter; margin: 0.55in; }
+  @media print {
+    body { background: var(--paper) !important; padding: 0 !important; }
+    .toolbar { display: none !important; }
+    .page {
+      box-shadow: none !important; padding: 0 !important;
+      max-width: 100% !important; min-height: auto !important; margin: 0 !important;
+    }
+    .page-break { page-break-before: always; }
+    .no-break { page-break-inside: avoid; }
+    a { color: var(--ink) !important; text-decoration: underline; }
+    .data-block { background: transparent !important; border: 1px solid var(--ink-mid) !important; }
+  }
+
+  /* === Type ramp ================================================ */
+  h1.display {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 44pt; line-height: 0.96; letter-spacing: -0.02em;
+    color: var(--ink); margin-bottom: 4pt;
+  }
+  h1.display em { font-style: italic; color: inherit; font-weight: 500; }
+  h2.section {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 18pt; line-height: 1.05; letter-spacing: -0.01em;
+    color: var(--ink); margin: 14pt 0 6pt;
+  }
+  h3.subsection {
+    font-family: var(--sans); font-weight: 700;
+    font-size: 10pt; text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--teal); margin: 10pt 0 4pt;
+  }
+  .eyebrow {
+    font-family: var(--mono); font-size: 8.5pt;
+    text-transform: uppercase; letter-spacing: 0.22em;
+    color: var(--ink-low); font-weight: 700; margin-bottom: 6pt;
+  }
+  .eyebrow .accent { color: var(--ink); background: var(--lime); padding: 1pt 6pt; }
+  p, li {
+    font-family: var(--sans); font-size: 10pt; line-height: 1.5;
+    color: var(--ink-soft); margin-bottom: 6pt;
+  }
+  ul, ol { padding-left: 18pt; }
+  ul li { margin-bottom: 3pt; list-style: none; position: relative; }
+  ul li::before { content: "›"; position: absolute; left: -14pt; color: var(--teal); font-weight: 700; }
+  ol li { margin-bottom: 4pt; }
+  strong { font-weight: 700; color: var(--ink); }
+  a { color: var(--teal); text-decoration: underline; text-underline-offset: 2px; }
+  code, .mono {
+    font-family: var(--mono); font-size: 9pt;
+    background: var(--gray); padding: 1pt 5pt; color: var(--ink);
+  }
+
+  /* === Layout primitives ======================================== */
+  header.cover {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    border-bottom: 2pt solid var(--ink); padding-bottom: 14pt; margin-bottom: 18pt;
+  }
+  header.cover .meta {
+    font-family: var(--mono); font-size: 8.5pt; line-height: 1.5;
+    text-align: right; color: var(--ink-mid); letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .lede {
+    font-family: var(--serif); font-size: 13pt; line-height: 1.4;
+    color: var(--ink); font-weight: 400; margin-bottom: 14pt;
+    border-left: 3pt solid var(--lime); padding-left: 12pt;
+  }
+  .two-col {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14pt; margin-bottom: 8pt;
+  }
+  .data-block {
+    background: rgba(207,255,4,0.18);
+    border: 1pt solid var(--line); padding: 10pt 12pt; margin-bottom: 8pt;
+  }
+  .data-block .label {
+    font-family: var(--mono); font-size: 8pt; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink-mid); margin-bottom: 4pt;
+  }
+  .data-block .num {
+    font-family: var(--mono); font-size: 22pt; font-weight: 700; color: var(--ink); line-height: 1;
+  }
+  .data-block .note {
+    font-family: var(--sans); font-size: 9pt; color: var(--ink-mid); margin-top: 4pt;
+  }
+  .kpi-row {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8pt; margin: 8pt 0 14pt;
+  }
+  table.tbl {
+    width: 100%; border-collapse: collapse; font-size: 9pt; margin: 6pt 0 8pt;
+    font-family: var(--sans);
+  }
+  table.tbl th, table.tbl td {
+    text-align: left; padding: 5pt 6pt; border-bottom: 1pt solid var(--line);
+    vertical-align: top;
+  }
+  table.tbl th {
+    font-family: var(--mono); font-size: 8.5pt; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-mid);
+    border-bottom: 1.5pt solid var(--ink);
+  }
+  table.tbl td.num { font-family: var(--mono); font-weight: 600; }
+
+  /* signature footer */
+  footer.signoff {
+    margin-top: 22pt; padding-top: 12pt; border-top: 1pt solid var(--ink);
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-family: var(--mono); font-size: 8.5pt; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink-mid);
+  }
+  footer.signoff .sign { font-family: var(--serif); font-size: 11pt; font-style: italic; color: var(--ink); text-transform: none; letter-spacing: normal; }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <div>RETROSPECTIVA · VERSIÓN PAPEL · LAB10 GROWTH TRIAL</div>
+  <div>
+    <a href="/retrospectiva">← Versión interactiva</a>
+    &nbsp;·&nbsp;
+    <button onclick="window.print()">Imprimir / Guardar como PDF</button>
+  </div>
+</div>
+
+<!-- ================== PAGE 1 ================== -->
+<div class="page">
+
+  <header class="cover">
+    <div>
+      <div class="eyebrow"><span class="accent">DOCUMENTO INTERNO</span> &nbsp; Retrospectiva · Lab10 Growth Suscripción Trial</div>
+      <h1 class="display">14 días de <em>growth en público</em>.</h1>
+    </div>
+    <div class="meta">
+      <div>Nicolás Borja</div>
+      <div>hola@nicoborja.com</div>
+      <div>Trial: 2026-05-05 al 2026-05-18</div>
+      <div>Documento: <span id="docDate">11 mayo 2026</span></div>
+      <div>Día <span id="dayCounter">7</span> de 14</div>
+    </div>
+  </header>
+
+  <p class="lede">
+    Esta retrospectiva responde a las cinco preguntas que Lab10 hace al final del trial. Lo que sigue es estado real al día indicado, no proyección. La versión interactiva con actualización diaria vive en <span class="mono">network.nicoborja.com/retrospectiva</span>.
+  </p>
+
+  <h2 class="section">¿Qué hice exactamente? ¿En qué orden?</h2>
+  <p>
+    <strong>D1:</strong> diagnóstico de marca live en <span class="mono">checkup.nicoborja.com</span>; Infodípity publicado en Substack. <strong>D2:</strong> anchor post en LinkedIn formato narrativa personal + técnica; aprendizaje sobre cómo lee mi audiencia. <strong>D3:</strong> asistencia a clase semanal Lab10; PawBot v0 en Telegram (archivado D5, postmortem abajo). <strong>D4:</strong> Carousel Engine v1 + sitio Network live (<span class="mono">network.nicoborja.com</span>) + LinkedIn Ads activadas. <strong>D5:</strong> repositorio público MIT con toolkit Python; iteración 2 del sitio. <strong>D7:</strong> hub público en <span class="mono">lab10.nicoborja.com</span> con vista 3D de los artefactos; documento mid-trial subido a Lab10; carrusel de mitad de camino publicado. <strong>D8-D14:</strong> entrevistas grabadas miércoles 13 + viernes 15, publicadas jueves 14 + lunes 18; drafts de diagnósticos por segmento sábado 16; cierre lunes 18.
+  </p>
+
+  <h2 class="section">¿Qué funcionó mejor y qué no funcionó?</h2>
+  <h3 class="subsection">Funcionó</h3>
+  <ul>
+    <li><strong>Construir en público con timestamp.</strong> Cada artefacto verificable con captura, UTM y registro. Trazabilidad en una sola dirección.</li>
+    <li><strong>Liberar herramientas como acto de marketing.</strong> El repo MIT de Network tuvo mejor recepción que cualquier post directo de captación. Método como producto.</li>
+  </ul>
+  <h3 class="subsection">No funcionó</h3>
+  <ul>
+    <li><strong>Link en primer comentario.</strong> 0 link clicks en el anchor post. Pivot a link en el cuerpo desde D3.</li>
+    <li><strong>PawBot vía OpenClaw.</strong> Build-failure (pnpm + node-pty); par incompatible token-device. Archivado D5 con postmortem. Si la herramienta del otro falla, el operador no espera.</li>
+  </ul>
+
+  <div class="kpi-row no-break">
+    <div class="data-block">
+      <div class="label">LinkedIn Personal</div>
+      <div class="num">1,343</div>
+      <div class="note">followers al día 8</div>
+    </div>
+    <div class="data-block">
+      <div class="label">Carrusel D7</div>
+      <div class="num">117</div>
+      <div class="note">imp · 1 reaction · soft launch</div>
+    </div>
+    <div class="data-block">
+      <div class="label">LinkedIn Ads</div>
+      <div class="num">34,852</div>
+      <div class="note">imp · $105.69 spend</div>
+    </div>
+    <div class="data-block">
+      <div class="label">CTR Paid</div>
+      <div class="num">1.41%</div>
+      <div class="note">$0.22 CPC · 490 clicks</div>
+    </div>
+  </div>
+
+  <h2 class="section">¿Qué aprendí sobre la comunidad de Lab10?</h2>
+  <ol>
+    <li><strong>Comunidad y suscripción son funnels distintos.</strong> El signup gratuito (<span class="mono">comunidad.lab10.ai/register</span>) es donde Lab10 valida el KPI de 2,000. El endpoint de pago $25/mes no existe públicamente al día 7. Gap de funnel, no fallo de comunicación; el bundle carga <span class="mono">js.stripe.com/buy-button.js</span> sin renderizar botón.</li>
+    <li><strong>La fuerza de Lab10 es la cadencia gratuita.</strong> Clases en vivo semanales, +35 talleres, Reto Agentes 7 días, ideas.lab10.ai abierta. La cadencia ya entrena adopción; el reto de growth es convertir audiencia entrenada a compromiso paga cuando exista el endpoint.</li>
+    <li><strong>El multiplicador supera al volumen.</strong> Mi análisis de Network mostró que en una audiencia de 1,342, la concentración real de impacto está en 27 personas alto ICP + 401 senior/CXO. En Lab10, los founders y operadores ya internos tienen el poder de difusión. La estrategia ganadora es activar 20-50 amplificadores, no captar 2,000 randoms.</li>
+  </ol>
+
+  <footer class="signoff">
+    <div>SOUND · Nico Borja · Net results, sin ruido.</div>
+    <div class="sign">Página 1 de 2</div>
+  </footer>
+</div>
+
+<!-- ================== PAGE 2 ================== -->
+<div class="page page-break">
+
+  <h2 class="section">Si me contratan, ¿cuál sería mi estrategia para convertir comunidad en suscriptores de pago?</h2>
+  <p>Plan en cinco pasos, ordenado por dependencia, no por importancia. Cada paso compone sobre el anterior.</p>
+  <ol>
+    <li><strong>Liberar el endpoint público $25/mes.</strong> Un solo signup, upsell desde <span class="mono">comunidad.lab10.ai</span>, atribución UTM limpia. Sin endpoint no hay conversión que medir. Primera semana.</li>
+    <li><strong>Cinco diagnósticos por segmento alineados al producto.</strong> Builder/dev (egresados del Reto Agentes); marketer/operator LATAM; career-transitioner mid-career a IA; founder/owner SME; educador/training lead. Cada uno es herramienta gratuita que termina en upsell. Drafts arrancan sábado 16 dentro de este trial.</li>
+    <li><strong>Activar amplificadores internos.</strong> 20 a 50 founders y operadores ya en la comunidad reciben acceso anticipado a Pro + referidos por créditos (no efectivo). Conversión inicial vendida como acceso, no como pago.</li>
+    <li><strong>Convertir contenido existente en bait targetizado.</strong> Cada uno de los +35 talleres genera tres piezas: Substack ensayo, carrusel LinkedIn vía Carousel Engine, short vertical para IG y TikTok. Sistema reusable, sin presupuesto.</li>
+    <li><strong>Cadencia operativa semanal.</strong> Lunes daily briefing público, miércoles release técnico, viernes retrospectiva pública. Mismo formato que este trial, escalado al equipo. Playbook documentado en lab10.nicoborja.com.</li>
+  </ol>
+
+  <h2 class="section">¿En cuánto tiempo completé la prueba?</h2>
+  <p>14 días calendario, lunes 5 a lunes 18 de mayo 2026. D6 (domingo 10 may) fue día de descanso explícito. Preparación previa (audit Lab10 + setup), 4 días Apr 30 a May 4.</p>
+
+  <h2 class="section">Evidencia</h2>
+  <table class="tbl">
+    <thead><tr><th>Artefacto</th><th>Surface</th><th>Atribución</th></tr></thead>
+    <tbody>
+      <tr><td>Diagnóstico de marca</td><td class="mono">checkup.nicoborja.com</td><td>LinkedIn Insight Tag · UTM <span class="mono">network-viz-cta</span></td></tr>
+      <tr><td>Network repo MIT</td><td class="mono">network.nicoborja.com · github.com/elnicoborja/nicoborja-network</td><td>UTM <span class="mono">network-viz-cta</span> / <span class="mono">-footer</span></td></tr>
+      <tr><td>Retrospectiva viva</td><td class="mono">network.nicoborja.com/retrospectiva</td><td>actualización diaria</td></tr>
+      <tr><td>Carrusel días 1-3</td><td>LinkedIn · post 2026-05-08</td><td>screenshot timestamped</td></tr>
+      <tr><td>Carrusel mid-trial día 7</td><td>LinkedIn · post 2026-05-11</td><td>screenshot timestamped</td></tr>
+      <tr><td>Carousel Engine</td><td class="mono">lab10.nicoborja.com/carousels</td><td>uso interno; renderiza todos los carruseles</td></tr>
+      <tr><td>Lab10 Hub</td><td class="mono">lab10.nicoborja.com</td><td>Three.js + sort por timeline/horas/reach/valor</td></tr>
+      <tr><td>Substack Infodípity</td><td class="mono">nicoborja.substack.com/p/infodipity-es-con-tilde</td><td>publicado 2026-05-05</td></tr>
+      <tr><td>Mid-trial Update PDF</td><td>team.lab10.ai · página de aplicación</td><td>subido 2026-05-11</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="subsection">Esquema UTM</h3>
+  <p><span class="mono">utm_source=nicoborja &amp; utm_medium=referral &amp; utm_campaign=lab10-trial-2026-05 &amp; utm_content={asset}-{action}</span>. Todo el tráfico saliente hacia Lab10 lleva este prefijo. Inbound traffic (LinkedIn, Substack, email directo) lleva su propio <span class="mono">utm_source</span> + <span class="mono">utm_medium</span>.</p>
+
+  <h3 class="subsection">Nota de método</h3>
+  <p>Este trial está pensado como demostración de cómo trabajaría dentro de Lab10. La cadencia, las herramientas liberadas, la transparencia de proceso, la distinción entre señal y KPI, y la honestidad sobre el techo son lo que ofrezco como Growth Suscripción. La versión interactiva con datos al día vive en <span class="mono">network.nicoborja.com/retrospectiva</span>.</p>
+
+  <footer class="signoff">
+    <div>SOUND · Nico Borja · Net results, sin ruido.</div>
+    <div class="sign">Página 2 de 2</div>
+  </footer>
+</div>
+
+<script>
+  // Auto-compute day counter from trial start
+  (function(){
+    const start = new Date("2026-05-05T00:00:00-05:00");
+    const now = new Date();
+    const ms = now - start;
+    const day = Math.max(1, Math.min(14, Math.floor(ms / 86400000) + 1));
+    const e = document.getElementById("dayCounter");
+    if (e) e.textContent = day;
+    const fmt = now.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+    const d = document.getElementById("docDate");
+    if (d) d.textContent = fmt;
+  })();
+</script>
+</body>
+</html>
