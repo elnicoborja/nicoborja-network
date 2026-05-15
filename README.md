@@ -1,10 +1,13 @@
 # nicoborja-network
 
 **Live**: [network.nicoborja.com](https://network.nicoborja.com)
+**Long-form essay (Spanish)**: [Net-work, una herramienta para ver la forma de tu carrera](https://nicoborja.substack.com/p/net-work-una-herramienta-para-ver)
 **Source**: this repo
 **License**: MIT, fork freely
 
 A read of my own LinkedIn network as data. 1,342 connections, 17 years, seven professional eras, scored against an ICP filter, ordered as the cola de outreach for the next 14 days.
+
+The companion essay explains the why: why MIT, why local, what I saw when I ran it on my own 17 years of LinkedIn data, and what I ask of you if you run it on yours.
 
 This repo holds two things:
 
