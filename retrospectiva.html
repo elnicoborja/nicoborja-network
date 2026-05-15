@@ -399,14 +399,75 @@ utm_content={asset}-{action}    # asset = checkup|network|substack|linkedin · a
 <section class="py-12 border-t border-zinc-800">
   <div class="container-x">
     <div class="mono text-[10px] uppercase tracking-[0.24em] text-[#DFFF00] mb-3">06 · ESTRATEGIA DE CONVERSIÓN · SI ME CONTRATAN</div>
-    <h2 class="text-3xl md:text-4xl font-black mb-6">147,000 a $25/mes<span class="text-[#DFFF00]">.</span></h2>
+    <h2 class="text-3xl md:text-4xl font-black mb-6">De 147,000 a $25/mes<span class="text-[#DFFF00]">.</span></h2>
     <p class="text-zinc-300 text-base leading-relaxed max-w-3xl mb-4">
-      Tres vectores de conversión, cada uno apalanca y amplifica un asset que ya construí en este trial: el diagnóstico, el analizador de red, y el formato corto de entrevistas con operadores reales. La tesis común: convertir 147,000 personas a $25/mes no se hace optimizando el checkout, se hace haciendo que la versión gratuita sea tan útil que la versión pagada se vende sola.
+      Primero, un diagnóstico, el endpoint público de $25/mes no existe al Día 11 y la asimetría entre canales rediseña dónde está la cosecha real. Después, tres vectores de conversión, cada uno apalanca y amplifica un asset que ya construí en este trial: el diagnóstico, el analizador de red, y el formato corto de entrevistas con operadores reales. La tesis común: convertir 147,000 personas a $25/mes no se hace optimizando el checkout, se hace cerrando el gap del checkout primero y después haciendo que la versión gratuita sea tan útil que la versión pagada se vende sola.
     </p>
     <p class="mono text-[11px] uppercase tracking-[0.18em] text-zinc-500 mb-8">
-      Sustancia definida 2026-05-09 · lenguaje final por refinarse antes de submission Día 14
+      Diagnóstico expandido 2026-05-15 · lenguaje final por refinarse antes de submission Día 14
     </p>
     <div class="space-y-6">
+      <div class="panel p-6">
+        <div class="flex items-baseline gap-3 mb-3">
+          <span class="ord" style="color:#FF714E;">00</span>
+          <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#FF714E] font-bold">DIAGNÓSTICO DEL FUNNEL · LO PRIMERO ANTES DE OPTIMIZAR</div>
+        </div>
+        <p class="text-zinc-300 text-sm leading-relaxed mb-3">
+          El KPI del trial mide el funnel de comunidad, signup gratuito en <code class="mono text-[#DFFF00]">comunidad.lab10.ai/register</code>. El funnel de suscripción a $25/mes es funnel posterior, y al Día 11 <strong>el endpoint público no existe</strong>. El bundle de la página de Lab10 carga <code class="mono text-[#DFFF00]">js.stripe.com/buy-button.js</code> pero no renderiza ningún botón visible. Esto no es fallo de mensaje ni de tráfico, es un gap técnico en producción.
+        </p>
+        <p class="text-zinc-300 text-sm leading-relaxed">
+          Implicación: optimizar funnel de pago antes de cerrar el gap es construir sobre vacío. Si me contratan, la primera semana es debuggear ese flujo, instrumentar el checkout, y deployar la versión funcional. Solo después tienen sentido los vectores A, B y C que siguen.
+        </p>
+      </div>
+      <div class="panel p-6">
+        <div class="flex items-baseline gap-3 mb-3">
+          <span class="ord">00b</span>
+          <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] font-bold">ASIMETRÍA DE CANAL · DELTAS DÍA 4 → DÍA 11</div>
+        </div>
+        <table class="w-full text-sm mb-3">
+          <thead>
+            <tr class="border-b border-zinc-800 text-left">
+              <th class="py-2 pr-3 mono text-[10px] uppercase tracking-[0.18em] text-zinc-500">Canal</th>
+              <th class="py-2 pr-3 mono text-[10px] uppercase tracking-[0.18em] text-zinc-500 text-right">Baseline D4</th>
+              <th class="py-2 pr-3 mono text-[10px] uppercase tracking-[0.18em] text-zinc-500 text-right">D11</th>
+              <th class="py-2 pr-3 mono text-[10px] uppercase tracking-[0.18em] text-zinc-500 text-right">Δ%</th>
+            </tr>
+          </thead>
+          <tbody class="text-zinc-300">
+            <tr class="border-b border-zinc-900"><td class="py-2 pr-3">Instagram</td><td class="py-2 pr-3 mono text-zinc-400 text-right">24,700</td><td class="py-2 pr-3 mono text-zinc-300 text-right">26,000</td><td class="py-2 pr-3 mono text-[#DFFF00] text-right">+5.3%</td></tr>
+            <tr class="border-b border-zinc-900"><td class="py-2 pr-3">LinkedIn</td><td class="py-2 pr-3 mono text-zinc-400 text-right">14,000</td><td class="py-2 pr-3 mono text-zinc-300 text-right">13,654</td><td class="py-2 pr-3 mono text-[#FF714E] text-right">-2.5%</td></tr>
+            <tr class="border-b border-zinc-900"><td class="py-2 pr-3">YouTube</td><td class="py-2 pr-3 mono text-zinc-400 text-right">2,350</td><td class="py-2 pr-3 mono text-zinc-300 text-right">2,360</td><td class="py-2 pr-3 mono text-zinc-300 text-right">+0.4%</td></tr>
+            <tr class="border-b border-zinc-900"><td class="py-2 pr-3">TikTok</td><td class="py-2 pr-3 mono text-zinc-400 text-right">2,187</td><td class="py-2 pr-3 mono text-zinc-300 text-right">2,331</td><td class="py-2 pr-3 mono text-[#DFFF00] text-right">+6.6%</td></tr>
+            <tr class="border-t border-zinc-700 font-bold"><td class="py-2 pr-3 mono text-[10px] text-[#DFFF00]">Total 4 canales</td><td class="py-2 pr-3 mono text-[#DFFF00] text-right">43,237</td><td class="py-2 pr-3 mono text-[#DFFF00] text-right">44,345</td><td class="py-2 pr-3 mono text-[#DFFF00] text-right">+2.6%</td></tr>
+          </tbody>
+        </table>
+        <p class="text-zinc-300 text-sm leading-relaxed">
+          En 7 días, la audiencia agregada de Lab10 creció +2.6% neto. La composición importa más que el agregado, Instagram y TikTok suman ~1,400 personas, LinkedIn pierde 346, YouTube prácticamente flat. El público activo de Lab10 está en formatos visuales y verticales cortos, no en LinkedIn.
+        </p>
+        <p class="text-zinc-300 text-sm leading-relaxed mt-3">
+          Implicación para el funnel a $25/mes, la cosecha de community signup debe priorizar IG + TikTok como canales primarios, complementado con comunidad propia. Mi trial corrió principalmente en LinkedIn (canal de mi perfil personal). Eso significa que mis números son el escenario conservador, el mismo método en IG produciría mayor volumen de signups con menor esfuerzo de operador.
+        </p>
+      </div>
+      <div class="panel p-6">
+        <div class="flex items-baseline gap-3 mb-3">
+          <span class="ord" style="color:#FF714E;">00c</span>
+          <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#FF714E] font-bold">FUNNEL VIVIDO COMO PROSPECTO · 12-14 MAY 2026</div>
+        </div>
+        <p class="text-zinc-300 text-sm leading-relaxed mb-3">
+          Llené el formulario público de 10x Builders entre 24 y 48h antes del primer contacto, incluyendo URL personal e interés declarado. La conversación fue por WhatsApp con Juan Vela. Observación cruda de lo que pasó:
+        </p>
+        <ul class="text-zinc-300 text-sm leading-relaxed space-y-1 ml-4 mb-3">
+          <li><span class="mono text-[#FF714E]">→</span> Apertura "vi que estás interesado", sin referenciar ningún campo del formulario</li>
+          <li><span class="mono text-[#FF714E]">→</span> Al preguntar si conocía mi perfil, respondió "no cuéntame". Forma → CRM → WhatsApp no aparece integrado</li>
+          <li><span class="mono text-[#FF714E]">→</span> Cero preguntas calificadoras (budget, timeline, decisor, sector, equipo). Pitch idéntico para todo prospecto</li>
+          <li><span class="mono text-[#FF714E]">→</span> Pricing claro al total ($3,200 USD / 4 personas / 8 semanas). Opaco en tools, "ilimitadas en OpenRouter, las demás según plan team $20-25 USD". Net cost real queda incierto al prospecto</li>
+          <li><span class="mono text-[#FF714E]">→</span> Cero close attempts (sin propuesta de llamada, contrato, fecha de arranque)</li>
+          <li><span class="mono text-[#FF714E]">→</span> 43h 46min de silencio post-pregunta técnica. Reactivación con "Hola, cómo estás?" sin valor agregado</li>
+        </ul>
+        <p class="text-zinc-300 text-sm leading-relaxed">
+          Implicación para Vector A: la palanca de mayor ROI no es un diagnóstico nuevo sino un Cohort Fit Check que (1) califica al community member antes de que llegue al WhatsApp del rep, (2) entrega al rep contexto pre-cargado del prospecto, (3) rutea a buyers vs explorers vs scholarship-fit. Spec V0 documentado en <code class="mono text-[#DFFF00]">lab10-cohort-fit-check-spec.md</code>, build estimado 2 días reutilizando el shell de <a class="lnk" href="https://checkup.nicoborja.com">checkup.nicoborja.com</a>.
+        </p>
+      </div>
       <div class="panel p-6">
         <div class="flex items-baseline gap-3 mb-3">
           <span class="ord">A</span>
