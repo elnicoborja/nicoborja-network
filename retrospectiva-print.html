@@ -67,8 +67,8 @@
     }
   }
 
-  /* PRINT: hide toolbar, remove surround, paper edge-to-edge, page breaks */
-  @page { size: letter; margin: 0.55in; }
+  /* PRINT: optimized for letter 2-page fit */
+  @page { size: letter; margin: 0.45in 0.5in; }
   @media print {
     body { background: var(--paper) !important; padding: 0 !important; }
     .toolbar { display: none !important; }
@@ -78,105 +78,115 @@
     }
     .page-break { page-break-before: always; }
     .no-break { page-break-inside: avoid; }
+    .kpi-row, table.tbl, .data-block, footer.signoff, header.cover { page-break-inside: avoid; }
+    h2.section { page-break-after: avoid; }
+    h3.subsection { page-break-after: avoid; }
     a { color: var(--ink) !important; text-decoration: underline; }
     .data-block { background: transparent !important; border: 1px solid var(--ink-mid) !important; }
   }
 
-  /* === Type ramp ================================================ */
+  /* === Type ramp · letter-optimized ============================== */
   h1.display {
     font-family: var(--serif); font-weight: 700;
-    font-size: 44pt; line-height: 0.96; letter-spacing: -0.02em;
-    color: var(--ink); margin-bottom: 4pt;
+    font-size: 30pt; line-height: 0.98; letter-spacing: -0.02em;
+    color: var(--ink); margin-bottom: 3pt;
   }
   h1.display em { font-style: italic; color: inherit; font-weight: 500; }
   h2.section {
     font-family: var(--serif); font-weight: 700;
-    font-size: 18pt; line-height: 1.05; letter-spacing: -0.01em;
-    color: var(--ink); margin: 14pt 0 6pt;
+    font-size: 14pt; line-height: 1.1; letter-spacing: -0.01em;
+    color: var(--ink); margin: 10pt 0 4pt;
   }
   h3.subsection {
     font-family: var(--sans); font-weight: 700;
-    font-size: 10pt; text-transform: uppercase; letter-spacing: 0.14em;
-    color: var(--teal); margin: 10pt 0 4pt;
+    font-size: 9pt; text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--teal); margin: 6pt 0 2pt;
   }
   .eyebrow {
-    font-family: var(--mono); font-size: 8.5pt;
+    font-family: var(--mono); font-size: 7.5pt;
     text-transform: uppercase; letter-spacing: 0.22em;
-    color: var(--ink-low); font-weight: 700; margin-bottom: 6pt;
+    color: var(--ink-low); font-weight: 700; margin-bottom: 4pt;
   }
-  .eyebrow .accent { color: var(--ink); background: var(--lime); padding: 1pt 6pt; }
+  .eyebrow .accent { color: var(--ink); background: var(--lime); padding: 1pt 5pt; }
   p, li {
-    font-family: var(--sans); font-size: 10pt; line-height: 1.5;
-    color: var(--ink-soft); margin-bottom: 6pt;
+    font-family: var(--sans); font-size: 9pt; line-height: 1.4;
+    color: var(--ink-soft); margin-bottom: 4pt;
   }
-  ul, ol { padding-left: 18pt; }
-  ul li { margin-bottom: 3pt; list-style: none; position: relative; }
-  ul li::before { content: "›"; position: absolute; left: -14pt; color: var(--teal); font-weight: 700; }
-  ol li { margin-bottom: 4pt; }
+  ul, ol { padding-left: 16pt; }
+  ul li { margin-bottom: 2pt; list-style: none; position: relative; }
+  ul li::before { content: "›"; position: absolute; left: -12pt; color: var(--teal); font-weight: 700; }
+  ol li { margin-bottom: 3pt; }
   strong { font-weight: 700; color: var(--ink); }
   a { color: var(--teal); text-decoration: underline; text-underline-offset: 2px; }
   code, .mono {
-    font-family: var(--mono); font-size: 9pt;
-    background: var(--gray); padding: 1pt 5pt; color: var(--ink);
+    font-family: var(--mono); font-size: 8pt;
+    background: var(--gray); padding: 0.5pt 4pt; color: var(--ink);
   }
 
   /* === Layout primitives ======================================== */
   header.cover {
-    display: flex; justify-content: space-between; align-items: flex-start;
-    border-bottom: 2pt solid var(--ink); padding-bottom: 14pt; margin-bottom: 18pt;
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 18pt;
+    border-bottom: 1.5pt solid var(--ink); padding-bottom: 10pt; margin-bottom: 12pt;
   }
   header.cover .meta {
-    font-family: var(--mono); font-size: 8.5pt; line-height: 1.5;
+    font-family: var(--mono); font-size: 7.5pt; line-height: 1.55;
     text-align: right; color: var(--ink-mid); letter-spacing: 0.12em; text-transform: uppercase;
+    flex-shrink: 0;
   }
   .lede {
-    font-family: var(--serif); font-size: 13pt; line-height: 1.4;
-    color: var(--ink); font-weight: 400; margin-bottom: 14pt;
-    border-left: 3pt solid var(--lime); padding-left: 12pt;
+    font-family: var(--serif); font-size: 10.5pt; line-height: 1.4;
+    color: var(--ink); font-weight: 400; margin-bottom: 10pt;
+    border-left: 2.5pt solid var(--lime); padding-left: 10pt;
   }
   .two-col {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 14pt; margin-bottom: 8pt;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12pt; margin-bottom: 6pt;
   }
   .data-block {
     background: rgba(207,255,4,0.18);
-    border: 1pt solid var(--line); padding: 10pt 12pt; margin-bottom: 8pt;
+    border: 1pt solid var(--line); padding: 6pt 8pt; margin-bottom: 6pt;
   }
   .data-block .label {
-    font-family: var(--mono); font-size: 8pt; letter-spacing: 0.18em;
-    text-transform: uppercase; color: var(--ink-mid); margin-bottom: 4pt;
+    font-family: var(--mono); font-size: 6.5pt; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--ink-mid); margin-bottom: 2pt;
   }
   .data-block .num {
-    font-family: var(--mono); font-size: 22pt; font-weight: 700; color: var(--ink); line-height: 1;
+    font-family: var(--mono); font-size: 15pt; font-weight: 700; color: var(--ink); line-height: 1;
   }
   .data-block .note {
-    font-family: var(--sans); font-size: 9pt; color: var(--ink-mid); margin-top: 4pt;
+    font-family: var(--sans); font-size: 7.5pt; color: var(--ink-mid); margin-top: 2pt; line-height: 1.3;
   }
   .kpi-row {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8pt; margin: 8pt 0 14pt;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 6pt; margin: 6pt 0 10pt;
   }
   table.tbl {
-    width: 100%; border-collapse: collapse; font-size: 9pt; margin: 6pt 0 8pt;
+    width: 100%; border-collapse: collapse; font-size: 8pt; margin: 4pt 0 6pt;
     font-family: var(--sans);
   }
   table.tbl th, table.tbl td {
-    text-align: left; padding: 5pt 6pt; border-bottom: 1pt solid var(--line);
+    text-align: left; padding: 3pt 5pt; border-bottom: 0.75pt solid var(--line);
     vertical-align: top;
   }
   table.tbl th {
-    font-family: var(--mono); font-size: 8.5pt; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-mid);
-    border-bottom: 1.5pt solid var(--ink);
+    font-family: var(--mono); font-size: 7pt; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-mid);
+    border-bottom: 1.25pt solid var(--ink);
   }
   table.tbl td.num { font-family: var(--mono); font-weight: 600; }
+  table.tbl td .mono, table.tbl td code { font-size: 7pt; padding: 0 2pt; }
 
   /* signature footer */
   footer.signoff {
-    margin-top: 22pt; padding-top: 12pt; border-top: 1pt solid var(--ink);
+    margin-top: 14pt; padding-top: 8pt; border-top: 0.75pt solid var(--ink);
     display: flex; justify-content: space-between; align-items: flex-start;
-    font-family: var(--mono); font-size: 8.5pt; letter-spacing: 0.12em;
+    font-family: var(--mono); font-size: 7.5pt; letter-spacing: 0.12em;
     text-transform: uppercase; color: var(--ink-mid);
   }
-  footer.signoff .sign { font-family: var(--serif); font-size: 11pt; font-style: italic; color: var(--ink); text-transform: none; letter-spacing: normal; }
+  footer.signoff .sign { font-family: var(--serif); font-size: 9pt; font-style: italic; color: var(--ink); text-transform: none; letter-spacing: normal; }
+
+  /* Screen page sizing override - now matches print proportions */
+  @media screen {
+    .page { min-height: auto !important; padding: 0.45in 0.5in !important; }
+  }
 </style>
 </head>
 <body>
