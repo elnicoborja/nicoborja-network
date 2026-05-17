@@ -217,6 +217,15 @@ utm_content={asset}-{action}    # asset = checkup|network|substack|linkedin · a
           Día 5, primer release del network viz pasó verificación desktop pero falló en móvil iPhone 15 Pro. Bug específico: un toggle de clase invertido escondía la lista mobile en vez de mostrarla. Iteración 2 corrige + agrega lista interactiva con checkboxes (top 10 activos por defecto, máximo 15, mini hub-spoke preview). Lección: QA en device físico es no negociable, simulador desktop no detecta este tipo de regresión.
         </p>
       </div>
+      <div class="panel p-6">
+        <div class="flex items-baseline gap-3 mb-3">
+          <span class="ord">11</span>
+          <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#FF714E] font-bold">INTERVIEW PACK NO ATERRIZÓ</div>
+        </div>
+        <p class="text-zinc-300 text-sm leading-relaxed">
+          Día 5 drafteé el pack de entrevistas con dos operadores LATAM, Diego Jaimes (d.strategy lab) y Juan Diego Ardila (Uniandes). Día 11 sin respuesta de ninguno al follow-up. La hipótesis original (formato corto interview alimenta Vector C de la conversión + Substack ensayo 3) no aterrizó en la ventana del trial. Lección: outreach a operadores warm es ciclo de 7 a 14 días en promedio, no compatible con un sprint de 14 días si arranca recién Día 5. Para futuras sprints, outreach va en Día 1 con preguntas listas, no Día 5. El Vector C de la Sección 06 pivotea de "interview format" a Cohort Fit Check (spec en disco), que no depende del calendario de terceros y aborda directamente el gap de qualification documentado en Panel 00c.
+        </p>
+      </div>
     </div>
   </div>
 </section>
@@ -268,9 +277,9 @@ utm_content={asset}-{action}    # asset = checkup|network|substack|linkedin · a
         <span class="mono text-xs text-zinc-500">Audience A · LATAM Cold</span>
       </div>
       <div class="panel p-6">
-        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-2 font-bold">INTERVIEW PACK (DRAFT, DÍA 5 · STATUS DÍA 11)</div>
-        <p class="text-zinc-400 text-sm mb-2">Diego Jaimes (d.strategy lab, WhatsApp voice notes, 5 preguntas reactivadas Día 11) + Juan Diego Ardila (Uniandes, Google Meet, pendiente). Ninguna grabación completada al cierre Día 11. Si entran, alimentan retrospectiva final + Substack ensayo 3.</p>
-        <span class="mono text-xs text-zinc-500">05_LAB10/ai-interview-pack.md</span>
+        <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-2 font-bold">"AI CON CAMI" (QUEUED, SHIP SEMANA POST-SUBMISSION)</div>
+        <p class="text-zinc-400 text-sm mb-2">Pieza conjunta con Camila Méndez (co-founder SOUND OS, Experience Architect, <a class="lnk" href="https://camikazi.design">camikazi.design</a>). Operadora LATAM que usa AI "deliberately, knowing where to direct it, when to push back, and when to put it away entirely". Carrusel LinkedIn + Substack post conjunto, ship semana del 18 al 22. Sucesor del formato Friends with AI desde un caso real de partnership operador, no entrevista de tercero.</p>
+        <span class="mono text-xs text-zinc-500">Trial → cadencia de contenido continua</span>
       </div>
       <div class="panel p-6">
         <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] mb-2 font-bold">CARRUSEL DÍAS 1-3 (LIVE, DÍA 4)</div>
@@ -501,16 +510,16 @@ utm_content={asset}-{action}    # asset = checkup|network|substack|linkedin · a
       <div class="panel p-6">
         <div class="flex items-baseline gap-3 mb-3">
           <span class="ord">C</span>
-          <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] font-bold">"FRIENDS WITH AI" · ENTREVISTAS CORTAS DE WORKFLOW REAL</div>
+          <div class="mono text-[10px] uppercase tracking-[0.22em] text-[#DFFF00] font-bold">COHORT FIT CHECK · EL PUENTE ENTRE COMUNIDAD GRATIS Y COHORT PAGO</div>
         </div>
         <p class="text-zinc-300 text-sm leading-relaxed mb-3">
-          Serie corta de entrevistas con operadores fuera de Lab10 mostrando workflows reales de IA. La regla del formato: no hype, no demo. Cada entrevistado nombra una tarea concreta que está haciendo con IA, qué cambió, qué se rompió, y un dolor del aprendizaje "autónomo" (sin comunidad) que está experimentando. Lab10 es la respuesta implícita a ese dolor. Las primeras dos entrevistas (Diego Jaimes en estrategia de marketing, Juan Diego Ardila en arquitectura y diseño) ya están agendadas como parte de este trial.
+          Herramienta web ligera que un community member de Lab10 corre en 90 a 120 segundos. 7 preguntas, output personalizado en pantalla, payload pre-cargado al WhatsApp del rep de sales antes del primer contacto. Cierra el gap diagnosticado en Panel 00c, qualification ausente entre el formulario público y la conversación de WhatsApp. Spec V0 documentado y listo, build estimado 2 días reusando shell de checkup.nicoborja.com.
         </p>
         <ul class="text-zinc-300 text-sm leading-relaxed space-y-1 ml-4">
-          <li><span class="mono text-[#DFFF00]">→</span> Operadores reales fuera de Lab10, no influencers ni voceros</li>
-          <li><span class="mono text-[#DFFF00]">→</span> Cada clip surface un pain point del aprender IA en solitario que Lab10 resuelve</li>
-          <li><span class="mono text-[#DFFF00]">→</span> Doble función, contenido distribuíble + market research de necesidades reales</li>
-          <li><span class="mono text-[#DFFF00]">→</span> Bandera implícita: "esta gente lo está logrando, vente con la comunidad que los habilita"</li>
+          <li><span class="mono text-[#DFFF00]">→</span> Filtra y rutea community members en 4 buckets, buyer ready / explorer / scholarship fit / squad fit</li>
+          <li><span class="mono text-[#DFFF00]">→</span> El sales rep recibe pre-brief estructurado antes del primer contacto, rol, equipo, goal, tiempo, decisor, budget</li>
+          <li><span class="mono text-[#DFFF00]">→</span> Pregunta Q7 (budget tier) captura demand signal para Squad Pack o tier intermedio que hoy no existe</li>
+          <li><span class="mono text-[#DFFF00]">→</span> Métricas de impacto, time-to-qualified-contact baja de 24-48h a menos de 4h, close rate de buyer ready 30%+</li>
         </ul>
       </div>
     </div>
