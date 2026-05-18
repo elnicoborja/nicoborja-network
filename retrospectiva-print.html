@@ -68,7 +68,7 @@
   }
 
   /* PRINT: optimized for letter 2-page fit */
-  @page { size: letter; margin: 0.45in 0.5in; }
+  @page { size: letter; margin: 0.4in 0.5in; }
   @media print {
     body { background: var(--paper) !important; padding: 0 !important; }
     .toolbar { display: none !important; }
@@ -97,13 +97,13 @@
   h1.display em { font-style: italic; color: inherit; font-weight: 500; }
   h2.section {
     font-family: var(--serif); font-weight: 700;
-    font-size: 14pt; line-height: 1.1; letter-spacing: -0.01em;
-    color: var(--ink); margin: 10pt 0 4pt;
+    font-size: 13pt; line-height: 1.1; letter-spacing: -0.01em;
+    color: var(--ink); margin: 7pt 0 3pt;
   }
   h3.subsection {
     font-family: var(--sans); font-weight: 700;
-    font-size: 9pt; text-transform: uppercase; letter-spacing: 0.14em;
-    color: var(--teal); margin: 6pt 0 2pt;
+    font-size: 8.5pt; text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--teal); margin: 4pt 0 1pt;
   }
   .eyebrow {
     font-family: var(--mono); font-size: 7.5pt;
@@ -112,13 +112,14 @@
   }
   .eyebrow .accent { color: var(--ink); background: var(--lime); padding: 1pt 5pt; }
   p, li {
-    font-family: var(--sans); font-size: 9pt; line-height: 1.4;
-    color: var(--ink-soft); margin-bottom: 4pt;
+    font-family: var(--sans); font-size: 9pt; line-height: 1.35;
+    color: var(--ink-soft); margin-bottom: 3pt;
+    orphans: 3; widows: 3;
   }
-  ul, ol { padding-left: 16pt; }
+  ul, ol { padding-left: 14pt; }
   ul li { margin-bottom: 2pt; list-style: none; position: relative; }
-  ul li::before { content: "›"; position: absolute; left: -12pt; color: var(--teal); font-weight: 700; }
-  ol li { margin-bottom: 3pt; }
+  ul li::before { content: "›"; position: absolute; left: -10pt; color: var(--teal); font-weight: 700; }
+  ol li { margin-bottom: 2pt; }
   strong { font-weight: 700; color: var(--ink); }
   a { color: var(--teal); text-decoration: underline; text-underline-offset: 2px; }
   code, .mono {
@@ -162,11 +163,12 @@
     display: grid; grid-template-columns: repeat(4, 1fr); gap: 6pt; margin: 6pt 0 10pt;
   }
   table.tbl {
-    width: 100%; border-collapse: collapse; font-size: 8pt; margin: 4pt 0 6pt;
+    width: 100%; border-collapse: collapse; font-size: 7.5pt; margin: 3pt 0 5pt;
     font-family: var(--sans);
   }
+/* colgroup widths now inline per table */
   table.tbl th, table.tbl td {
-    text-align: left; padding: 3pt 5pt; border-bottom: 0.75pt solid var(--line);
+    text-align: left; padding: 2pt 4pt; border-bottom: 0.5pt solid var(--line);
     vertical-align: top;
   }
   table.tbl th {
@@ -280,7 +282,7 @@
 <div class="page page-break">
 
   <h2 class="section">Si me contratan, ¿cuál sería mi estrategia para convertir comunidad en suscriptores de pago?</h2>
-  <p>Plan en cinco pasos, ordenado por dependencia, no por importancia. Cada paso compone sobre el anterior.</p>
+  <p>Plan en cinco pasos por orden de dependencia. Cada paso compone sobre el anterior.</p>
   <ol>
     <li><strong>Cerrar el funnel transaccional. Día 1.</strong> Implementar confirmation email post-submission + nurture sequence en Klaviyo o Mailchimp + pre-brief automation al sales rep antes del primer contacto WhatsApp. Stack: 5 a 7 días con un sales ops + un dev. Mejora close rate del cohort $800 actual antes de tocar producto.</li>
     <li><strong>Build Cohort Fit Check.</strong> Herramienta web de 7 preguntas que califica community members en 4 buckets (buyer ready, explorer, scholarship fit, squad fit) y entrega pre-brief al rep antes del WhatsApp. Spec V0 en disco, build 2 días reusando shell de <span class="mono">checkup.nicoborja.com</span>. Resuelve directamente lo vivido como prospecto el 12-14 may.</li>
@@ -307,28 +309,26 @@
   <p style="font-size:9pt; color:var(--ink-mid); margin-top:-2pt;">El anuncio del D2 (martes 11:48 AM) lidera con 624 imp. El D11 Net-work article slot AM commute (07:00) NO superó al slot tardío AM (11:48). El asterisco en D11 "click" son 4 vistas de Article (métrica nativa LinkedIn long-form), no link clicks externos.</p>
 
   <h3 class="subsection">Artefactos publicados</h3>
-  <table class="tbl">
-    <thead><tr><th>Artefacto</th><th>Surface</th><th>Atribución</th></tr></thead>
+  <table class="tbl tbl-art">
+    <colgroup><col style="width:28%"><col style="width:72%"></colgroup>
+    <thead><tr><th>Artefacto</th><th>Surface · Atribución</th></tr></thead>
     <tbody>
-      <tr><td>Diagnóstico de marca</td><td class="mono">checkup.nicoborja.com</td><td>Insight Tag · UTM <span class="mono">network-viz-cta</span></td></tr>
-      <tr><td>Network repo MIT (toolkit)</td><td class="mono">network.nicoborja.com · github.com/elnicoborja/nicoborja-network</td><td>UTM <span class="mono">network-viz-cta</span> / <span class="mono">-footer</span></td></tr>
-      <tr><td>Substack Infodípity (ensayo 1)</td><td class="mono">nicoborja.substack.com/p/infodipity-es-con-tilde</td><td>publicado 2026-05-05</td></tr>
-      <tr><td>Substack Net-work (ensayo 2)</td><td class="mono">nicoborja.substack.com/p/net-work-una-herramienta-para-ver</td><td>publicado 2026-05-15 + LinkedIn Article cross-post</td></tr>
-      <tr><td>Retrospectiva viva (Cloudflare Access)</td><td class="mono">network.nicoborja.com/retrospectiva</td><td>update diario · OTP por email</td></tr>
-      <tr><td>Carousel Engine</td><td class="mono">lab10.nicoborja.com/carousels</td><td>uso interno · 4 carruseles renderizados</td></tr>
-      <tr><td>Lab10 Hub público</td><td class="mono">lab10.nicoborja.com</td><td>Three.js + sort modes + timeline histogram footer</td></tr>
-      <tr><td>Mid-trial Update PDF</td><td>team.lab10.ai · aplicación</td><td>subido 2026-05-11</td></tr>
-      <tr><td>Cohort Fit Check spec V0</td><td class="mono">adjunto · lab10-cohort-fit-check-spec.md</td><td>spec V0, build 2 días si me contratan</td></tr>
-      <tr><td>Squad Pack spec V0</td><td class="mono">adjunto · lab10-squad-pack-spec.md</td><td>spec V0, 3 tiers de equipo (5-15 / 16-50 / 50+)</td></tr>
-      <tr><td>Net-work BI brief V0</td><td class="mono">adjunto · net-work-bi-brief.md</td><td>brief exploratorio, productización del toolkit</td></tr>
+      <tr><td>Diagnóstico de marca</td><td><span class="mono">checkup.nicoborja.com</span> · Insight Tag · UTM <span class="mono">network-viz-cta</span></td></tr>
+      <tr><td>Network repo MIT (toolkit)</td><td><span class="mono">network.nicoborja.com</span> · <span class="mono">github.com/elnicoborja/nicoborja-network</span> · UTM <span class="mono">network-viz-cta / -footer</span></td></tr>
+      <tr><td>Substack Infodípity (ensayo 1)</td><td><span class="mono">nicoborja.substack.com/p/infodipity-es-con-tilde</span> · publicado 2026-05-05</td></tr>
+      <tr><td>Substack Net-work (ensayo 2)</td><td><span class="mono">nicoborja.substack.com/p/net-work-una-herramienta-para-ver</span> · publicado 2026-05-15 + LinkedIn Article cross-post</td></tr>
+      <tr><td>Retrospectiva viva (Cloudflare Access)</td><td><span class="mono">network.nicoborja.com/retrospectiva</span> · update diario · OTP por email</td></tr>
+      <tr><td>Carousel Engine</td><td><span class="mono">lab10.nicoborja.com/carousels</span> · uso interno · 4 carruseles renderizados</td></tr>
+      <tr><td>Lab10 Hub público</td><td><span class="mono">lab10.nicoborja.com</span> · Three.js + sort modes + timeline histogram footer</td></tr>
+      <tr><td>Mid-trial Update PDF</td><td>team.lab10.ai · aplicación · subido 2026-05-11</td></tr>
+      <tr><td>Cohort Fit Check spec V0</td><td><span class="mono">adjunto · lab10-cohort-fit-check-spec.md</span> · build 2 días si me contratan</td></tr>
+      <tr><td>Squad Pack spec V0</td><td><span class="mono">adjunto · lab10-squad-pack-spec.md</span> · 3 tiers de equipo (5-15 / 16-50 / 50+)</td></tr>
+      <tr><td>Net-work BI brief V0</td><td><span class="mono">adjunto · net-work-bi-brief.md</span> · brief exploratorio, productización del toolkit</td></tr>
     </tbody>
   </table>
 
-  <h3 class="subsection">Esquema UTM</h3>
-  <p><span class="mono">utm_source=nicoborja &amp; utm_medium=referral &amp; utm_campaign=lab10-trial-2026-05 &amp; utm_content={asset}-{action}</span>. Todo el tráfico saliente hacia Lab10 lleva este prefijo. Inbound traffic (LinkedIn, Substack, email directo) lleva su propio <span class="mono">utm_source</span> + <span class="mono">utm_medium</span>.</p>
-
-  <h3 class="subsection">Nota de método</h3>
-  <p>Este trial está pensado como demostración de cómo trabajaría dentro de Lab10. La cadencia, las herramientas liberadas, la transparencia de proceso, la distinción entre señal y KPI, y la honestidad sobre el techo son lo que ofrezco como Growth Suscripción. La versión interactiva con datos al día vive en <span class="mono">network.nicoborja.com/retrospectiva</span>.</p>
+  <h3 class="subsection">Esquema UTM · Nota de método</h3>
+  <p><strong>UTM:</strong> <span class="mono">utm_source=nicoborja &amp; utm_medium=referral &amp; utm_campaign=lab10-trial-2026-05 &amp; utm_content={asset}-{action}</span>. Tráfico saliente lleva este prefijo; inbound lleva su propio <span class="mono">utm_source/medium</span>. <strong>Método:</strong> el trial es demostración de cómo trabajaría dentro de Lab10. Cadencia, herramientas liberadas, transparencia de proceso, distinción entre señal y KPI, honestidad sobre el techo. Versión interactiva con datos al día en <span class="mono">network.nicoborja.com/retrospectiva</span>.</p>
 
   <footer class="signoff">
     <div>SOUND · Nico Borja · Net results, sin ruido.</div>
