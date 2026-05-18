@@ -78,7 +78,10 @@
     }
     .page-break { page-break-before: always; }
     .no-break { page-break-inside: avoid; }
-    .kpi-row, table.tbl, .data-block, footer.signoff, header.cover { page-break-inside: avoid; }
+    .kpi-row, .data-block, header.cover { page-break-inside: avoid; }
+    /* table.tbl and footer.signoff intentionally NOT in avoid list, they can break naturally */
+    table.tbl tr { page-break-inside: avoid; } /* avoid breaking mid-row */
+    table.tbl thead { display: table-header-group; } /* repeat thead on split */
     h2.section { page-break-after: avoid; }
     h3.subsection { page-break-after: avoid; }
     a { color: var(--ink) !important; text-decoration: underline; }
@@ -176,8 +179,8 @@
 
   /* signature footer */
   footer.signoff {
-    margin-top: 14pt; padding-top: 8pt; border-top: 0.75pt solid var(--ink);
-    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-top: 10pt; padding-top: 6pt; border-top: 0.75pt solid var(--ink);
+    display: flex; justify-content: flex-start; align-items: center;
     font-family: var(--mono); font-size: 7.5pt; letter-spacing: 0.12em;
     text-transform: uppercase; color: var(--ink-mid);
   }
@@ -270,7 +273,6 @@
 
   <footer class="signoff">
     <div>SOUND · Nico Borja · Net results, sin ruido.</div>
-    <div class="sign">Página 1 de 2</div>
   </footer>
 </div>
 
@@ -330,7 +332,6 @@
 
   <footer class="signoff">
     <div>SOUND · Nico Borja · Net results, sin ruido.</div>
-    <div class="sign">Página 2 de 2</div>
   </footer>
 </div>
 
